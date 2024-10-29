@@ -14,8 +14,14 @@ public class EnemyTypeA : EnemyBase
     {
         if (CanAttack())
         {
-            Debug.Log("te ataco en A");
-            
+            RaycastHit hit;
+            var direction = (player.position - transform.position).normalized;
+            if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity))
+            {
+                Debug.Log("Did Hit!!!!");
+            }
         }
+
     }
 }
+
