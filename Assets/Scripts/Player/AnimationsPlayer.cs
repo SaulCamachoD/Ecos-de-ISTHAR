@@ -17,6 +17,7 @@ public class AnimationsPlayer : MonoBehaviour
         WalkAnimations();
         ActivateRun();
         ActivateJump(movementsPlayer.isJumping); 
+        ActivateDash(movementsPlayer.isDashing);
         
     }
 
@@ -34,6 +35,11 @@ public class AnimationsPlayer : MonoBehaviour
     private void ActivateJump(bool enter)
     {
         animator.SetBool("Jump", enter);
+    }
+
+    private void ActivateDash(bool enter)
+    {
+        animator.SetBool("Dash" , enter);
     }
 
 }

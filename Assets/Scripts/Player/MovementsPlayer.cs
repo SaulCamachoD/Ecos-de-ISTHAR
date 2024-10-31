@@ -6,16 +6,21 @@ using UnityEngine.Rendering;
 public class MovementsPlayer : MonoBehaviour
 {
     private InputSystem_Actions controls;
+    private Vector3 jumpTargetPosition;
+    private Camera mainCamera;
+    private float dashEndTime;
     public Vector2 directionPlayer;
-    public bool isRunning;
     public Rigidbody rb;
     public PlayerSettings variables;
     public LayerMask obstacleLayer;
     public float obstacleDetectionDistance = 1.5f;
-    private Camera mainCamera;
 
+    public bool isRunning;
     public bool isJumping = false;
-    private Vector3 jumpTargetPosition;
+    public bool isDashing = false;
+    private float dashTimeElapsed; // Nueva variable para el tiempo de dash
+    private Vector3 dashStartPosition; // Posición inicial del dash
+    private Vector3 dashTargetPosition; // Posición objetivo del dash
 
     private void Awake()
     {
@@ -30,6 +35,7 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Jump.started += Jump;
         controls.InputsPlayer.Sprint.started += StartRunning;
         controls.InputsPlayer.Sprint.canceled += StopRunning;
+        controls.InputsPlayer.Dash.started += StartDash;
     }
 
     private void OnDisable()
@@ -39,49 +45,77 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Jump.started -= Jump;
         controls.InputsPlayer.Sprint.started -= StartRunning;
         controls.InputsPlayer.Sprint.canceled -= StopRunning;
+        controls.InputsPlayer.Dash.started -= StartDash;
     }
 
     private void Update()
     {
         directionPlayer = controls.InputsPlayer.Move.ReadValue<Vector2>();
+
+        if (isDashing)
+        {
+            dashTimeElapsed += Time.deltaTime;
+            float dashProgress = dashTimeElapsed / variables.dashDuration;
+
+            // Interpolación de posición
+            rb.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, dashProgress);
+
+            // Finalización del dash
+            if (dashTimeElapsed >= variables.dashDuration)
+            {
+                isDashing = false;
+            }
+        }
     }
 
     private void FixedUpdate()
     {
 
-        Vector3 movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
-
-        Vector3 camForward = mainCamera.transform.forward;
-        Vector3 camRight = mainCamera.transform.right;
-
-        camForward.y = 0;
-        camRight.y = 0;
-
-        camForward.Normalize();
-        camRight.Normalize();
-
-        Vector3 movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
-
-        Walk(movementRelativeToCamera, isRunning ? variables.speedSprint : variables.speed);
-
-        if (movementRelativeToCamera != Vector3.zero)
+        if (!isDashing) // Solo permitir movimiento normal si no se está haciendo dash
         {
-            Quaternion targetRotation = Quaternion.LookRotation(movementRelativeToCamera);
-            rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, Time.deltaTime * variables.rotationSpeed);
-        }
+            Vector3 movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
 
-        if (isJumping)
-        {
-            MoveTowardsJumpTarget();
+            Vector3 camForward = mainCamera.transform.forward;
+            Vector3 camRight = mainCamera.transform.right;
+
+            camForward.y = 0;
+            camRight.y = 0;
+
+            camForward.Normalize();
+            camRight.Normalize();
+
+            Vector3 movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
+
+            float currentSpeed = isRunning ? variables.speedSprint : variables.speed;
+            Walk(movementRelativeToCamera, currentSpeed);
+
+            if (movementRelativeToCamera != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(movementRelativeToCamera);
+                rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, Time.deltaTime * variables.rotationSpeed);
+            }
+
+            if (isJumping)
+            {
+                MoveTowardsJumpTarget();
+            }
         }
     }
 
 
     private void Walk(Vector3 movementFinal, float speed)
     {
-        if (!isJumping)
-        {
-            rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
+        if(!isJumping && movementFinal != Vector3.zero)
+    {
+            RaycastHit hit;
+            if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime))
+            {
+                rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
+            }
+            else
+            {
+                isRunning = false;
+            }
         }
     }
 
@@ -129,6 +163,17 @@ public class MovementsPlayer : MonoBehaviour
                     obstacle.ResetTrigger();
                 }
             }
+        }
+    }
+
+    private void StartDash(InputAction.CallbackContext context)
+    {
+        if (!isDashing)
+        {
+            isDashing = true;
+            dashTimeElapsed = 0f; 
+            dashStartPosition = rb.position;
+            dashTargetPosition = rb.position + transform.forward * variables.dashDistance; 
         }
     }
 

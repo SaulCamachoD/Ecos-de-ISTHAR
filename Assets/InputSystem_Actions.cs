@@ -64,10 +64,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Crouch"",
+                    ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""27c5f898-bc57-4ee1-8800-db469aca5fe3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -76,7 +76,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -480,7 +480,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Crouch"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -491,7 +491,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Crouch"",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1083,7 +1083,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_InputsPlayer_Look = m_InputsPlayer.FindAction("Look", throwIfNotFound: true);
         m_InputsPlayer_Attack = m_InputsPlayer.FindAction("Attack", throwIfNotFound: true);
         m_InputsPlayer_Interact = m_InputsPlayer.FindAction("Interact", throwIfNotFound: true);
-        m_InputsPlayer_Crouch = m_InputsPlayer.FindAction("Crouch", throwIfNotFound: true);
+        m_InputsPlayer_Dash = m_InputsPlayer.FindAction("Dash", throwIfNotFound: true);
         m_InputsPlayer_Jump = m_InputsPlayer.FindAction("Jump", throwIfNotFound: true);
         m_InputsPlayer_Previous = m_InputsPlayer.FindAction("Previous", throwIfNotFound: true);
         m_InputsPlayer_Next = m_InputsPlayer.FindAction("Next", throwIfNotFound: true);
@@ -1171,7 +1171,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_InputsPlayer_Look;
     private readonly InputAction m_InputsPlayer_Attack;
     private readonly InputAction m_InputsPlayer_Interact;
-    private readonly InputAction m_InputsPlayer_Crouch;
+    private readonly InputAction m_InputsPlayer_Dash;
     private readonly InputAction m_InputsPlayer_Jump;
     private readonly InputAction m_InputsPlayer_Previous;
     private readonly InputAction m_InputsPlayer_Next;
@@ -1184,7 +1184,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_InputsPlayer_Look;
         public InputAction @Attack => m_Wrapper.m_InputsPlayer_Attack;
         public InputAction @Interact => m_Wrapper.m_InputsPlayer_Interact;
-        public InputAction @Crouch => m_Wrapper.m_InputsPlayer_Crouch;
+        public InputAction @Dash => m_Wrapper.m_InputsPlayer_Dash;
         public InputAction @Jump => m_Wrapper.m_InputsPlayer_Jump;
         public InputAction @Previous => m_Wrapper.m_InputsPlayer_Previous;
         public InputAction @Next => m_Wrapper.m_InputsPlayer_Next;
@@ -1210,9 +1210,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @Crouch.started += instance.OnCrouch;
-            @Crouch.performed += instance.OnCrouch;
-            @Crouch.canceled += instance.OnCrouch;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
@@ -1241,9 +1241,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @Crouch.started -= instance.OnCrouch;
-            @Crouch.performed -= instance.OnCrouch;
-            @Crouch.canceled -= instance.OnCrouch;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
@@ -1442,7 +1442,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnCrouch(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnPrevious(InputAction.CallbackContext context);
         void OnNext(InputAction.CallbackContext context);
