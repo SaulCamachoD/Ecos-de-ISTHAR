@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +24,9 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private float sightRange = 5f;
     [SerializeField] private float attackCooldown = 1.5f;
     private float _nextAttackTime;
+    
+    
+    private Animation _animation;
 
     public float SightRange => sightRange;
     public float CurrentEnergy => _currentEnergy;
@@ -32,6 +36,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _animation = GetComponent<Animation>();
         _navMeshAgent.speed = moveSpeed;
     }
 

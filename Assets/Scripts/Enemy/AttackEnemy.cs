@@ -10,6 +10,7 @@ namespace Enemy
         {
             _enemyAI = enemyAI;
             _enemyAI.navMeshAgent.isStopped = true;
+            _enemyAI.animator.SetTrigger("Attack");
             Debug.Log("estoy en ataque");
         }
 

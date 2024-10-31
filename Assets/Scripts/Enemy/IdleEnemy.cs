@@ -9,6 +9,7 @@ namespace Enemy
         public void EnterState(EnemyAIcontroller enemyAI)
         {
             _enemyAI = enemyAI;
+            _enemyAI.animator.SetTrigger("Idle");
             Debug.Log("estoy en idle");
         }
 

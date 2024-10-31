@@ -13,27 +13,29 @@ public class EnemyAIcontroller : MonoBehaviour
 
 
     public NavMeshAgent navMeshAgent;
+    public Animator animator;
     public Transform player;
     private EnemyBase _enemy;
-    private IEnemyState _curreEnemyState;
+    private IEnemyState _currentEnemyState;
 
     private void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         _enemy = GetComponent<EnemyBase>();
         TransitionToState(IdleEnemyState);
     }
 
     private void Update()
     {
-       _curreEnemyState?.UpdateState();
+       _currentEnemyState?.UpdateState();
         
     }
     
     public void TransitionToState(IEnemyState newState)
     {
-        _curreEnemyState?.ExitState();
-        _curreEnemyState = newState;
-        _curreEnemyState.EnterState(this);
+        _currentEnemyState?.ExitState();
+        _currentEnemyState = newState;
+        _currentEnemyState.EnterState(this);
     }
 
     public bool CanSeePlayer()
