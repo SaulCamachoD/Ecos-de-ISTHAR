@@ -18,6 +18,7 @@ public class AnimationsPlayer : MonoBehaviour
         ActivateRun();
         ActivateJump(movementsPlayer.isJumping); 
         ActivateDash(movementsPlayer.isDashing);
+        ActivateAttackMode(movementsPlayer.isAttackinMode);
         
     }
 
@@ -40,6 +41,10 @@ public class AnimationsPlayer : MonoBehaviour
     private void ActivateDash(bool enter)
     {
         animator.SetBool("Dash" , enter);
+    }
+    private void ActivateAttackMode(bool enter)
+    {
+        animator.SetBool("AttackMode" , enter);
     }
 
 }

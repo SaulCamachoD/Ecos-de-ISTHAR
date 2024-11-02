@@ -12,15 +12,17 @@ public class MovementsPlayer : MonoBehaviour
     public Vector2 directionPlayer;
     public Rigidbody rb;
     public PlayerSettings variables;
+    public AttackModeCamera attackModeCamera;
     public LayerMask obstacleLayer;
     public float obstacleDetectionDistance = 1.5f;
 
     public bool isRunning;
     public bool isJumping = false;
     public bool isDashing = false;
-    private float dashTimeElapsed; // Nueva variable para el tiempo de dash
-    private Vector3 dashStartPosition; // Posición inicial del dash
-    private Vector3 dashTargetPosition; // Posición objetivo del dash
+    public bool isAttackinMode = false;
+    private float dashTimeElapsed; 
+    private Vector3 dashStartPosition; 
+    private Vector3 dashTargetPosition; 
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.started += StartRunning;
         controls.InputsPlayer.Sprint.canceled += StopRunning;
         controls.InputsPlayer.Dash.started += StartDash;
+        controls.InputsPlayer.AttackMode.started += MoveTargetCam;
     }
 
     private void OnDisable()
@@ -46,6 +49,7 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.started -= StartRunning;
         controls.InputsPlayer.Sprint.canceled -= StopRunning;
         controls.InputsPlayer.Dash.started -= StartDash;
+        controls.InputsPlayer.AttackMode.started -= MoveTargetCam;
     }
 
     private void Update()
@@ -57,10 +61,8 @@ public class MovementsPlayer : MonoBehaviour
             dashTimeElapsed += Time.deltaTime;
             float dashProgress = dashTimeElapsed / variables.dashDuration;
 
-            // Interpolación de posición
             rb.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, dashProgress);
 
-            // Finalización del dash
             if (dashTimeElapsed >= variables.dashDuration)
             {
                 isDashing = false;
@@ -71,7 +73,7 @@ public class MovementsPlayer : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (!isDashing) // Solo permitir movimiento normal si no se está haciendo dash
+        if (!isDashing) 
         {
             Vector3 movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
 
@@ -114,7 +116,7 @@ public class MovementsPlayer : MonoBehaviour
             }
             else
             {
-                isRunning = false;
+                //isRunning = false;
             }
         }
     }
@@ -177,7 +179,20 @@ public class MovementsPlayer : MonoBehaviour
         }
     }
 
+    private void MoveTargetCam(InputAction.CallbackContext context)
+    {
+        attackModeCamera.MoveTarget();
 
+        if (!isAttackinMode)
+        {
+            isAttackinMode = true;
+        }
+
+        else
+        {
+            isAttackinMode = false;
+        }
+    }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

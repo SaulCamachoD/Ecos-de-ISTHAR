@@ -107,6 +107,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttackMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab14536b-5b8b-4d38-9f3a-095779ae3561"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -492,6 +501,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""372c9ae0-3b5b-4444-8e72-34bbbfabcfa0"",
+                    ""path"": ""<Keyboard>/capsLock"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttackMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1088,6 +1108,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_InputsPlayer_Previous = m_InputsPlayer.FindAction("Previous", throwIfNotFound: true);
         m_InputsPlayer_Next = m_InputsPlayer.FindAction("Next", throwIfNotFound: true);
         m_InputsPlayer_Sprint = m_InputsPlayer.FindAction("Sprint", throwIfNotFound: true);
+        m_InputsPlayer_AttackMode = m_InputsPlayer.FindAction("AttackMode", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1176,6 +1197,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_InputsPlayer_Previous;
     private readonly InputAction m_InputsPlayer_Next;
     private readonly InputAction m_InputsPlayer_Sprint;
+    private readonly InputAction m_InputsPlayer_AttackMode;
     public struct InputsPlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1189,6 +1211,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Previous => m_Wrapper.m_InputsPlayer_Previous;
         public InputAction @Next => m_Wrapper.m_InputsPlayer_Next;
         public InputAction @Sprint => m_Wrapper.m_InputsPlayer_Sprint;
+        public InputAction @AttackMode => m_Wrapper.m_InputsPlayer_AttackMode;
         public InputActionMap Get() { return m_Wrapper.m_InputsPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1225,6 +1248,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @AttackMode.started += instance.OnAttackMode;
+            @AttackMode.performed += instance.OnAttackMode;
+            @AttackMode.canceled += instance.OnAttackMode;
         }
 
         private void UnregisterCallbacks(IInputsPlayerActions instance)
@@ -1256,6 +1282,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @AttackMode.started -= instance.OnAttackMode;
+            @AttackMode.performed -= instance.OnAttackMode;
+            @AttackMode.canceled -= instance.OnAttackMode;
         }
 
         public void RemoveCallbacks(IInputsPlayerActions instance)
@@ -1447,6 +1476,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnPrevious(InputAction.CallbackContext context);
         void OnNext(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnAttackMode(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
