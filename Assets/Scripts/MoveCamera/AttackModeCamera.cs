@@ -4,7 +4,8 @@ using Unity.Cinemachine;
 using UnityEngine;
 
 public class AttackModeCamera : MonoBehaviour
-{
+{   
+    public HudManager HudManager;
     private Vector3 inicialPosition;
     private Vector3 FinalPosition;
     private Vector3 currentPosition;
@@ -32,10 +33,14 @@ public class AttackModeCamera : MonoBehaviour
         if (targetPosition == inicialPosition)
         {
             targetPosition = FinalPosition;
+            HudManager.TargetVisibility(true);
         }
         else
         {
             targetPosition = inicialPosition;
+            HudManager.TargetVisibility(false);
         }
     }
+
+
 }
