@@ -63,7 +63,13 @@ public class EnemyAIcontroller : MonoBehaviour
     {
        _enemy.PerformMoveTowardsPlayer(player);   
     }
-    
-    
+
+    public void SetAnimationTrigger(string trigger)
+    {
+        animator.ResetTrigger("Idle");
+        animator.ResetTrigger("Run");
+        animator.ResetTrigger("Attack");
+        animator.SetTrigger(trigger);
+    }
    
 }

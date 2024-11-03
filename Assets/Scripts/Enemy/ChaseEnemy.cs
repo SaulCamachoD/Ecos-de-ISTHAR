@@ -9,7 +9,7 @@ namespace Enemy
         {
             _enemyAI = enemyAI;
             _enemyAI.navMeshAgent.isStopped = false; 
-            _enemyAI.animator.SetTrigger("Run");
+            _enemyAI.SetAnimationTrigger("Run");
             Debug.Log("estoy en caceria");
         }
 
