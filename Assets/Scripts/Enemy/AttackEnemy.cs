@@ -5,11 +5,13 @@ namespace Enemy
     public class AttackEnemy : IEnemyState
     {
         private EnemyAIcontroller _enemyAI;
+        private bool _isAttacking;
 
         public void EnterState(EnemyAIcontroller enemyAI)
         {
             _enemyAI = enemyAI;
             _enemyAI.navMeshAgent.isStopped = true;
+            _isAttacking = false;
             Debug.Log("estoy en ataque");
         }
 
@@ -17,11 +19,17 @@ namespace Enemy
         {
             if (_enemyAI.IsWhithinAttackRange())
             {
-                if (_enemyAI.CanAttack())
+                if (_enemyAI.CanAttack() && !_isAttacking)
                 {
-
+                    _isAttacking = true;
+                    _enemyAI.SetAnimationTrigger("Attack");
                     _enemyAI.PerformAttack();
                 }
+                else if (!_enemyAI.CanAttack())
+                {
+                    _isAttacking = false;
+                }
+                
             }
             else
             {
@@ -33,6 +41,7 @@ namespace Enemy
         public void ExitState()
         {
             _enemyAI.navMeshAgent.isStopped = false;
+            _isAttacking = false;
         }
     }
 }
