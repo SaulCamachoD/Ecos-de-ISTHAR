@@ -1,4 +1,6 @@
+using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -7,6 +9,7 @@ public class MovementsPlayer : MonoBehaviour
 {
     private InputSystem_Actions controls;
     private Vector3 jumpTargetPosition;
+    private Vector3 wallNormal;
     private Camera mainCamera;
     private float dashEndTime;
     public Vector2 directionPlayer;
@@ -14,15 +17,21 @@ public class MovementsPlayer : MonoBehaviour
     public PlayerSettings variables;
     public AttackModeCamera attackModeCamera;
     public LayerMask obstacleLayer;
+    public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
+    public float WallDetectionDistance = 1.5f;
 
     public bool isRunning;
     public bool isJumping = false;
     public bool isDashing = false;
     public bool isAttackinMode = false;
+    private bool isWalkingOnWall = false;
     private float dashTimeElapsed; 
     private Vector3 dashStartPosition; 
-    private Vector3 dashTargetPosition; 
+    private Vector3 dashTargetPosition;
+
+
+    private RaycastHit lastHit;
 
     private void Awake()
     {
@@ -73,7 +82,7 @@ public class MovementsPlayer : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (!isDashing) 
+        if (!isDashing)
         {
             Vector3 movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
 
@@ -89,18 +98,23 @@ public class MovementsPlayer : MonoBehaviour
             Vector3 movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
 
             float currentSpeed = isRunning ? variables.speedSprint : variables.speed;
-            Walk(movementRelativeToCamera, currentSpeed);
 
-            if (movementRelativeToCamera != Vector3.zero)
+            if (!isWalkingOnWall)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(movementRelativeToCamera);
-                rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, Time.deltaTime * variables.rotationSpeed);
-            }
+                Walk(movementRelativeToCamera, currentSpeed);
 
-            if (isJumping)
-            {
-                MoveTowardsJumpTarget();
+                if (movementRelativeToCamera != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(movementRelativeToCamera);
+                    rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, Time.deltaTime * variables.rotationSpeed);
+                }
+
+                if (isJumping)
+                {
+                    MoveTowardsJumpTarget();
+                }
             }
+            RunWall();
         }
     }
 
@@ -113,10 +127,6 @@ public class MovementsPlayer : MonoBehaviour
             if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime))
             {
                 rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
-            }
-            else
-            {
-                //isRunning = false;
             }
         }
     }
@@ -193,11 +203,61 @@ public class MovementsPlayer : MonoBehaviour
             isAttackinMode = false;
         }
     }
-    void OnDrawGizmos()
+    
+    private void RunWall()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position - transform.forward * obstacleDetectionDistance);
+        if (Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer))
+        {
+            StartWallRun();
+        }
+        else if (Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer))
+        {
+            StartWallRun();
+        }
+        else if (isWalkingOnWall)
+        {
+            StopWallRun();
+        }
     }
 
+    private void StartWallRun()
+    {
+        isWalkingOnWall = true;
+        rb.useGravity = false;
+        Quaternion wallRotation = Quaternion.LookRotation(Vector3.Cross(wallNormal, Vector3.up), wallNormal);
+        rb.rotation = Quaternion.Slerp(rb.rotation, wallRotation, Time.deltaTime * variables.rotationSpeed);
+        WalkOnWall();
+        print("Inicia a caminar");
+    }
+
+    private void WalkOnWall()
+    {
+        print("Caminando");
+    }
+
+    private void StopWallRun()
+    {
+        print("Termina de caminar");
+        isWalkingOnWall = false;
+        rb.useGravity = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 startPosition = transform.position;
+        Vector3 direction = transform.right;
+        Gizmos.DrawLine(startPosition, startPosition + direction * WallDetectionDistance);
+        Gizmos.DrawSphere(startPosition + direction * WallDetectionDistance, 0.1f);
+
+        if (lastHit.collider != null)
+        {
+            Gizmos.color = Color.green; 
+            Gizmos.DrawLine(lastHit.point, lastHit.point + lastHit.normal);
+            Gizmos.DrawSphere(lastHit.point, 0.1f);
+            print("Detectado");
+        }
+
+    }
 
 }

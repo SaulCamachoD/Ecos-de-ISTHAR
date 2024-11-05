@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerSettings : MonoBehaviour
 {
     [Header ("Player Speed")]
     public float speed;
     public float speedSprint;
+    public float wallRunSpeed;
 
     [Header ("Player Rotation")]
     public float rotationSpeed;
