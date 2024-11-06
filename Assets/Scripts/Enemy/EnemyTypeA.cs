@@ -3,11 +3,27 @@ using UnityEngine.AI;
 
 public class EnemyTypeA : EnemyBase
 {
-    
+    private NavMeshAgent _navMeshAgent;
 
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        if (_navMeshAgent != null)
+        {
+            _navMeshAgent.speed = moveSpeed;
+        }
+    }
+    
+    
     protected override void MoveTowardsPlayer(Transform player)
     {
-         NavMeshAgent.SetDestination(player.position);
+        if (_navMeshAgent != null)
+        {
+            _navMeshAgent.SetDestination(player.position);
+        }
     }
 
     protected override void Attack(Transform player)

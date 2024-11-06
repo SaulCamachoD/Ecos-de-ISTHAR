@@ -8,7 +8,10 @@ namespace Enemy
         public void EnterState(EnemyAIcontroller enemyAI)
         {
             _enemyAI = enemyAI;
-            _enemyAI.navMeshAgent.isStopped = false; 
+            if (_enemyAI.navMeshAgent != null)
+            {
+                _enemyAI.navMeshAgent.isStopped = false; 
+            }
             _enemyAI.SetAnimationTrigger("Run");
             Debug.Log("estoy en caceria");
         }
