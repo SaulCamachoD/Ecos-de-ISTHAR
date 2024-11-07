@@ -203,15 +203,13 @@ public class MovementsPlayer : MonoBehaviour
             isAttackinMode = false;
         }
     }
-    
+
     private void RunWall()
     {
-        if (Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer))
+        if (Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer) ||
+            Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer))
         {
-            StartWallRun();
-        }
-        else if (Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer))
-        {
+            wallNormal = lastHit.normal;
             StartWallRun();
         }
         else if (isWalkingOnWall)
@@ -224,20 +222,32 @@ public class MovementsPlayer : MonoBehaviour
     {
         isWalkingOnWall = true;
         rb.useGravity = false;
-        Quaternion wallRotation = Quaternion.LookRotation(Vector3.Cross(wallNormal, Vector3.up), wallNormal);
+
+        Vector3 wallForward = Vector3.Cross(wallNormal, Vector3.up);
+        if (Vector3.Dot(wallForward, transform.forward) < 0)
+        {
+            wallForward = -wallForward;
+        }
+
+
+        Quaternion wallRotation = Quaternion.LookRotation(wallForward, Vector3.up);
         rb.rotation = Quaternion.Slerp(rb.rotation, wallRotation, Time.deltaTime * variables.rotationSpeed);
-        WalkOnWall();
-        print("Inicia a caminar");
+
+        WalkOnWall(wallForward);
     }
 
-    private void WalkOnWall()
+    private void WalkOnWall(Vector3 wallDirection)
     {
-        print("Caminando");
+        // Movimiento en la dirección de la pared
+        float currentSpeed = variables.wallRunSpeed;
+        Vector3 movement = wallDirection * currentSpeed * Time.deltaTime;
+        rb.MovePosition(rb.position + movement);
+
+        rb.AddForce(-wallNormal * variables.wallGravity, ForceMode.Acceleration);
     }
 
     private void StopWallRun()
     {
-        print("Termina de caminar");
         isWalkingOnWall = false;
         rb.useGravity = true;
     }

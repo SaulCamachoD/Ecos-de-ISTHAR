@@ -17,5 +17,8 @@ public class PlayerSettings : MonoBehaviour
 
     [Header("Player dash Force")]
     public float dashDistance;
-    public float dashDuration;  
+    public float dashDuration;
+
+
+    public float wallGravity;
 }
