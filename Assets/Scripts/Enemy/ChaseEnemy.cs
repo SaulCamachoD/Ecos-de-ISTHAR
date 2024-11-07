@@ -18,7 +18,6 @@ namespace Enemy
 
         public void UpdateState()
         {
-           
             _enemyAI.MoveTowardPlayer();
             if (_enemyAI.IsWhithinAttackRange())
             {
