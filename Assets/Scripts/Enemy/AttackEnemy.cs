@@ -10,7 +10,11 @@ namespace Enemy
         public void EnterState(EnemyAIcontroller enemyAI)
         {
             _enemyAI = enemyAI;
-            _enemyAI.navMeshAgent.isStopped = true;
+            if (_enemyAI.navMeshAgent != null)
+            {
+                _enemyAI.navMeshAgent.isStopped = true;
+            }
+            
             _isAttacking = false;
             Debug.Log("estoy en ataque");
         }
@@ -40,7 +44,10 @@ namespace Enemy
 
         public void ExitState()
         {
-            _enemyAI.navMeshAgent.isStopped = false;
+            if (_enemyAI.navMeshAgent != null)
+            {
+                _enemyAI.navMeshAgent.isStopped = false;
+            }
             _isAttacking = false;
         }
     }

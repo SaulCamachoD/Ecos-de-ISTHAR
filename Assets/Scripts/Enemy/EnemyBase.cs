@@ -7,11 +7,9 @@ public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
     [SerializeField] private float maxHealth = 100f;
+    public float moveSpeed = 5f;
     private float _currentHealth;
-
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 3.5f;
-    private NavMeshAgent _navMeshAgent;
+    
 
     [Header("Energy Management")]
     [SerializeField] private float maxEnergy = 50f;
@@ -31,18 +29,19 @@ public abstract class EnemyBase : MonoBehaviour
     public float SightRange => sightRange;
     public float CurrentEnergy => _currentEnergy;
     public float AttackRange => attackRange;
-    protected NavMeshAgent NavMeshAgent => _navMeshAgent;
+ 
 
     protected virtual void Awake()
     {
-        _navMeshAgent = GetComponent<NavMeshAgent>();
+    
         _animation = GetComponent<Animation>();
-        _navMeshAgent.speed = moveSpeed;
+        InitializeStats();
+        
     }
 
     protected virtual void Start()
     {
-        InitializeStats();
+       
     }
 
     protected virtual void Update()
