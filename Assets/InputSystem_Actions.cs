@@ -49,7 +49,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -112,6 +112,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""AttackMode"",
                     ""type"": ""Button"",
                     ""id"": ""ab14536b-5b8b-4d38-9f3a-095779ae3561"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""4936c588-1df0-498a-8fc8-19d8a59ef5cb"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -512,6 +521,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AttackMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c65d3e7-22e5-4b60-a221-d384bcfe4b18"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1109,6 +1129,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_InputsPlayer_Next = m_InputsPlayer.FindAction("Next", throwIfNotFound: true);
         m_InputsPlayer_Sprint = m_InputsPlayer.FindAction("Sprint", throwIfNotFound: true);
         m_InputsPlayer_AttackMode = m_InputsPlayer.FindAction("AttackMode", throwIfNotFound: true);
+        m_InputsPlayer_ChangeWeapon = m_InputsPlayer.FindAction("ChangeWeapon", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1198,6 +1219,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_InputsPlayer_Next;
     private readonly InputAction m_InputsPlayer_Sprint;
     private readonly InputAction m_InputsPlayer_AttackMode;
+    private readonly InputAction m_InputsPlayer_ChangeWeapon;
     public struct InputsPlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1212,6 +1234,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Next => m_Wrapper.m_InputsPlayer_Next;
         public InputAction @Sprint => m_Wrapper.m_InputsPlayer_Sprint;
         public InputAction @AttackMode => m_Wrapper.m_InputsPlayer_AttackMode;
+        public InputAction @ChangeWeapon => m_Wrapper.m_InputsPlayer_ChangeWeapon;
         public InputActionMap Get() { return m_Wrapper.m_InputsPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1251,6 +1274,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @AttackMode.started += instance.OnAttackMode;
             @AttackMode.performed += instance.OnAttackMode;
             @AttackMode.canceled += instance.OnAttackMode;
+            @ChangeWeapon.started += instance.OnChangeWeapon;
+            @ChangeWeapon.performed += instance.OnChangeWeapon;
+            @ChangeWeapon.canceled += instance.OnChangeWeapon;
         }
 
         private void UnregisterCallbacks(IInputsPlayerActions instance)
@@ -1285,6 +1311,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @AttackMode.started -= instance.OnAttackMode;
             @AttackMode.performed -= instance.OnAttackMode;
             @AttackMode.canceled -= instance.OnAttackMode;
+            @ChangeWeapon.started -= instance.OnChangeWeapon;
+            @ChangeWeapon.performed -= instance.OnChangeWeapon;
+            @ChangeWeapon.canceled -= instance.OnChangeWeapon;
         }
 
         public void RemoveCallbacks(IInputsPlayerActions instance)
@@ -1477,6 +1506,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnNext(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnAttackMode(InputAction.CallbackContext context);
+        void OnChangeWeapon(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

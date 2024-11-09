@@ -14,6 +14,8 @@ public class AttackModeCamera : MonoBehaviour
     public float mz = 0;
     public float speed = 2.0f;
 
+    Transform sight;
+
 
     private void Start()
     {
@@ -21,6 +23,7 @@ public class AttackModeCamera : MonoBehaviour
         currentPosition = transform.localPosition;
         FinalPosition = new Vector3(transform.localPosition.x + mx, transform.localPosition.y, transform.localPosition.z + mz);
         targetPosition = inicialPosition;
+        sight = HudManager.transform;
     }
 
     private void Update()
@@ -41,6 +44,4 @@ public class AttackModeCamera : MonoBehaviour
             HudManager.TargetVisibility(false);
         }
     }
-
-
 }

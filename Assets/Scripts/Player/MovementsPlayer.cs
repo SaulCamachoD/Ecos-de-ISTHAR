@@ -16,6 +16,7 @@ public class MovementsPlayer : MonoBehaviour
     public Rigidbody rb;
     public PlayerSettings variables;
     public AttackModeCamera attackModeCamera;
+    public WeaponController weaponController;
     public LayerMask obstacleLayer;
     public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
@@ -48,6 +49,9 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.canceled += StopRunning;
         controls.InputsPlayer.Dash.started += StartDash;
         controls.InputsPlayer.AttackMode.started += MoveTargetCam;
+        controls.InputsPlayer.Attack.performed += FireWeapon;
+        controls.InputsPlayer.Attack.canceled += StopFireWeapon;
+        controls.InputsPlayer.ChangeWeapon.started += ChangeWeapon;
     }
 
     private void OnDisable()
@@ -59,6 +63,9 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.canceled -= StopRunning;
         controls.InputsPlayer.Dash.started -= StartDash;
         controls.InputsPlayer.AttackMode.started -= MoveTargetCam;
+        controls.InputsPlayer.Attack.performed -= FireWeapon;
+        controls.InputsPlayer.Attack.canceled -= FireWeapon;
+        controls.InputsPlayer.ChangeWeapon.started -= ChangeWeapon;
     }
 
     private void Update()
@@ -252,22 +259,24 @@ public class MovementsPlayer : MonoBehaviour
         rb.useGravity = true;
     }
 
-    private void OnDrawGizmosSelected()
+    private void FireWeapon(InputAction.CallbackContext context)
     {
-        Gizmos.color = Color.red;
-        Vector3 startPosition = transform.position;
-        Vector3 direction = transform.right;
-        Gizmos.DrawLine(startPosition, startPosition + direction * WallDetectionDistance);
-        Gizmos.DrawSphere(startPosition + direction * WallDetectionDistance, 0.1f);
-
-        if (lastHit.collider != null)
+        if (isAttackinMode)
         {
-            Gizmos.color = Color.green; 
-            Gizmos.DrawLine(lastHit.point, lastHit.point + lastHit.normal);
-            Gizmos.DrawSphere(lastHit.point, 0.1f);
-            print("Detectado");
+            weaponController.Fire(true); 
         }
+    }
+    private void StopFireWeapon(InputAction.CallbackContext context)
+    {
+        weaponController.Fire(false);
+    }
 
+    private void ChangeWeapon(InputAction.CallbackContext context)
+    {
+        if (isAttackinMode)
+        {
+            weaponController.HandleWeaponSwitch(); 
+        }
     }
 
 }
