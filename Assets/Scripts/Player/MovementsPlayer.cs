@@ -1,9 +1,5 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 public class MovementsPlayer : MonoBehaviour
 {
@@ -11,7 +7,10 @@ public class MovementsPlayer : MonoBehaviour
     private Vector3 jumpTargetPosition;
     private Vector3 wallNormal;
     private Camera mainCamera;
+    private float dashTimeElapsed;
     private float dashEndTime;
+    private Vector3 dashStartPosition;
+    private Vector3 dashTargetPosition;
     public Vector2 directionPlayer;
     public Rigidbody rb;
     public PlayerSettings variables;
@@ -27,9 +26,7 @@ public class MovementsPlayer : MonoBehaviour
     public bool isDashing = false;
     public bool isAttackinMode = false;
     private bool isWalkingOnWall = false;
-    private float dashTimeElapsed; 
-    private Vector3 dashStartPosition; 
-    private Vector3 dashTargetPosition;
+    private bool isAxesInverted = false;
 
 
     private RaycastHit lastHit;
@@ -84,14 +81,25 @@ public class MovementsPlayer : MonoBehaviour
                 isDashing = false;
             }
         }
+
     }
+
+
 
     private void FixedUpdate()
     {
-
         if (!isDashing)
         {
-            Vector3 movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
+            Vector3 movement;
+
+            if (isAxesInverted)
+            {
+                movement = new Vector3(-directionPlayer.y, 0, directionPlayer.x);
+            }
+            else
+            {
+                movement = new Vector3(directionPlayer.x, 0, directionPlayer.y);
+            }
 
             Vector3 camForward = mainCamera.transform.forward;
             Vector3 camRight = mainCamera.transform.right;
@@ -103,7 +111,6 @@ public class MovementsPlayer : MonoBehaviour
             camRight.Normalize();
 
             Vector3 movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
-
             float currentSpeed = isRunning ? variables.speedSprint : variables.speed;
 
             if (!isWalkingOnWall)
@@ -128,10 +135,10 @@ public class MovementsPlayer : MonoBehaviour
 
     private void Walk(Vector3 movementFinal, float speed)
     {
-        if(!isJumping && movementFinal != Vector3.zero)
-    {
+        if (!isJumping && movementFinal != Vector3.zero)
+        {
             RaycastHit hit;
-            if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime))
+            if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime) || hit.collider.isTrigger)
             {
                 rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
             }
@@ -190,9 +197,9 @@ public class MovementsPlayer : MonoBehaviour
         if (!isDashing)
         {
             isDashing = true;
-            dashTimeElapsed = 0f; 
+            dashTimeElapsed = 0f;
             dashStartPosition = rb.position;
-            dashTargetPosition = rb.position + transform.forward * variables.dashDistance; 
+            dashTargetPosition = rb.position + transform.forward * variables.dashDistance;
         }
     }
 
@@ -263,7 +270,7 @@ public class MovementsPlayer : MonoBehaviour
     {
         if (isAttackinMode)
         {
-            weaponController.Fire(true); 
+            weaponController.Fire(true);
         }
     }
     private void StopFireWeapon(InputAction.CallbackContext context)
@@ -275,8 +282,13 @@ public class MovementsPlayer : MonoBehaviour
     {
         if (isAttackinMode)
         {
-            weaponController.HandleWeaponSwitch(); 
+            weaponController.HandleWeaponSwitch();
         }
+    }
+
+    public void ToggleAxesInversion(bool inverted)
+    {
+        isAxesInverted = inverted;
     }
 
 }
