@@ -582,6 +582,7 @@ GameObject:
   - component: {fileID: 451931032}
   - component: {fileID: 451931033}
   - component: {fileID: 451931034}
+  - component: {fileID: 451931035}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -606,11 +607,11 @@ MonoBehaviour:
   maxEnergy: 100
   energyRechargeRate: 2
   energyCostPerAttack: 30
-  attackRange: 2
+  attackRange: 9
   sightRange: 10
   attackCooldown: 5
-  firePoint: {fileID: 0}
-  projectilePrefab: {fileID: 0}
+  projectileSpawnPoint: {fileID: 622160657}
+  projectilePrefab: {fileID: 2939022073730717899, guid: 7bae7e47cafe6c54d9124ff347a1fc96, type: 3}
 --- !u!4 &451931030
 Transform:
   m_ObjectHideFlags: 0
@@ -625,6 +626,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1710617392}
+  - {fileID: 622160657}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &451931032
@@ -687,6 +689,18 @@ CapsuleCollider:
   m_Height: 1.34
   m_Direction: 1
   m_Center: {x: 0, y: -0.36, z: 0}
+--- !u!114 &451931035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451931025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2504d5ab36e82d64488965551e38a339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &522842716
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +930,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!1 &622160656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 622160657}
+  m_Layer: 0
+  m_Name: FirePointE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &622160657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622160656}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.406, z: 0.439}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 451931030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &653084725 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7538259050056311705, guid: 9ba61eb7aae9948f496824c4ea7d1c8e, type: 3}
@@ -1489,7 +1534,6 @@ MonoBehaviour:
   attackRange: 9
   sightRange: 20
   attackCooldown: 1.5
-  firePoint: {fileID: 0}
   minAltitude: 5
   maxAltitude: 10
   detectionDistance: 5

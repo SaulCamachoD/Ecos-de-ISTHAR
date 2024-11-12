@@ -23,7 +23,7 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float sightRange = 5f;
     [SerializeField] private float attackCooldown = 1.5f;
-    [SerializeField] protected Transform firePoint;
+    
     private float _nextAttackTime;
     
     

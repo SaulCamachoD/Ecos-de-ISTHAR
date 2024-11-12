@@ -1,11 +1,12 @@
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class EnemyTypeA : EnemyBase
 {
-    private NavMeshAgent _navMeshAgent;
-    private Transform _projectileSpawnPoint;
+    private NavMeshAgent _navMeshAgent; 
+    public Transform projectileSpawnPoint;
     public GameObject projectilePrefab;
    
 
@@ -34,32 +35,17 @@ public class EnemyTypeA : EnemyBase
     {
         if (CanAttack())
         {
-            if (projectilePrefab == null)
-            {
-                Debug.LogError("Projectile prefab is not assigned!");
-                return;
-            }
-            if (_projectileSpawnPoint == null)
-            {
-                Debug.LogError("Projectile spawn point is not assigned!");
-                return;
-            }
-            if (ProjectilePool.Instance == null)
-            {
-                Debug.LogError("ProjectilePool instance is missing in the scene!");
-                return;
-            }
-            
-            var position = _projectileSpawnPoint.position;
+            var position = projectileSpawnPoint.position;
             Vector3 direction = (player.position - position).normalized;
             GameObject projectile = ProjectilePool.Instance.GetProjectile(projectilePrefab);
             projectile.transform.position = position;
             projectile.transform.rotation = Quaternion.LookRotation(direction);
-            projectile.GetComponent<Projectile>().SetOriginalPrefab(projectilePrefab);
-
+            var projectileScript = projectile.GetComponent<Projectile>();
+                projectileScript.SetOriginalPrefab(projectilePrefab);
+                projectileScript.targetTag = "Player";
         }
-
     }
+
 
     public void ShootEnemy()
     {

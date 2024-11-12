@@ -1,11 +1,17 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
+    public float damage = 10f;
+    
+    
     private float lifeTimer;
     private GameObject originalPrefab;
+    public String targetTag;
 
     private void OnEnable()
     {
@@ -25,9 +31,13 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag(targetTag))
         {
-            Debug.Log("Impacto en enemigo");
+            Debug.Log($"Impacto en {targetTag}");
+
+            EnemyBase enemyBase = GetComponent<EnemyBase>();
+            enemyBase.TakeDamage(damage);
+           
             ReturnToPool();
         }
     }

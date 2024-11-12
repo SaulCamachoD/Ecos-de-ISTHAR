@@ -123,3 +123,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   lifeTime: 2
+  damage: 10
+  targetTag: 
