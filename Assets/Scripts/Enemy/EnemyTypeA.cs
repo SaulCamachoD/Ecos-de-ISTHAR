@@ -1,9 +1,13 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyTypeA : EnemyBase
 {
     private NavMeshAgent _navMeshAgent;
+    private Transform _projectileSpawnPoint;
+    public GameObject projectilePrefab;
+   
 
 
 
@@ -30,14 +34,36 @@ public class EnemyTypeA : EnemyBase
     {
         if (CanAttack())
         {
-            RaycastHit hit;
-            var direction = (player.position - transform.position).normalized;
-            if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity))
+            if (projectilePrefab == null)
             {
-                Debug.Log("Did Hit!!!!");
+                Debug.LogError("Projectile prefab is not assigned!");
+                return;
             }
+            if (_projectileSpawnPoint == null)
+            {
+                Debug.LogError("Projectile spawn point is not assigned!");
+                return;
+            }
+            if (ProjectilePool.Instance == null)
+            {
+                Debug.LogError("ProjectilePool instance is missing in the scene!");
+                return;
+            }
+            
+            var position = _projectileSpawnPoint.position;
+            Vector3 direction = (player.position - position).normalized;
+            GameObject projectile = ProjectilePool.Instance.GetProjectile(projectilePrefab);
+            projectile.transform.position = position;
+            projectile.transform.rotation = Quaternion.LookRotation(direction);
+            projectile.GetComponent<Projectile>().SetOriginalPrefab(projectilePrefab);
+
         }
 
+    }
+
+    public void ShootEnemy()
+    {
+        
     }
 }
 
