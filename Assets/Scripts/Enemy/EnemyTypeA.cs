@@ -9,6 +9,7 @@ public class EnemyTypeA : EnemyBase
     public Transform projectileSpawnPoint;
     public GameObject projectilePrefab;
    
+   
 
 
 
@@ -43,6 +44,7 @@ public class EnemyTypeA : EnemyBase
             var projectileScript = projectile.GetComponent<Projectile>();
                 projectileScript.SetOriginalPrefab(projectilePrefab);
                 projectileScript.playerTag = "Player";
+              
         }
     }
 

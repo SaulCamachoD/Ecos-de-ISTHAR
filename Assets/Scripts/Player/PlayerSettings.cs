@@ -20,5 +20,14 @@ public class PlayerSettings : MonoBehaviour
     public float dashDuration;
 
 
+
+    [Header("Skills and Health")]
+    public float health;
+    public float healthMax = 100f;
+    public float Energy;
+    public float DamageBulltA;
+    public float DamageBulltB;
+
+
     public float wallGravity;
 }

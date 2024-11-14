@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3882573633191092859
 Transform:
   m_ObjectHideFlags: 0
@@ -127,6 +127,7 @@ MonoBehaviour:
   baseDamage: 10
   enemyTag: Enemy
   playerTag: Player
+  objectTag: Breakable
 --- !u!54 &-2449855443287605044
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -8,8 +8,9 @@ public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
     [SerializeField] private float maxHealth = 100f;
+    public float damage;
     public float moveSpeed = 5f;
-    public float _currentHealth;
+     public float currentHealth;
     
 
     [Header("Energy Management")]
@@ -54,7 +55,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     private void InitializeStats()
     {
-        _currentHealth = maxHealth;
+        currentHealth = maxHealth;
         _currentEnergy = maxEnergy;
     }
 
@@ -98,8 +99,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _currentHealth -= damage;
-        if (_currentHealth <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
             Die();
         }
