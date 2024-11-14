@@ -2,13 +2,14 @@ using System;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
     [SerializeField] private float maxHealth = 100f;
     public float moveSpeed = 5f;
-    private float _currentHealth;
+    public float _currentHealth;
     
 
     [Header("Energy Management")]
@@ -16,11 +17,13 @@ public abstract class EnemyBase : MonoBehaviour
     private float _currentEnergy;
     [SerializeField] private float energyRechargeRate = 5f;
     [SerializeField] private float energyCostPerAttack = 10f;
+    
 
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float sightRange = 5f;
     [SerializeField] private float attackCooldown = 1.5f;
+    
     private float _nextAttackTime;
     
     

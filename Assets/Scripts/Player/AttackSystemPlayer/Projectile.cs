@@ -1,11 +1,18 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
+    public float baseDamage = 10f;
+    
+    
     private float lifeTimer;
     private GameObject originalPrefab;
+    public string enemyTag;
+    public string playerTag;
 
     private void OnEnable()
     {
@@ -25,12 +32,25 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        
+        if (other.CompareTag(enemyTag))
         {
-            Debug.Log("Impacto en enemigo");
+            
+            BodyPart bodyPart = other.GetComponent<BodyPart>();
+            float damageMultiplier = bodyPart != null ? bodyPart.damageMultiplier : 1f;
+            float finalDamage = baseDamage * damageMultiplier;
+
+            EnemyBase enemyBase = other.GetComponentInParent<EnemyBase>();
+            if (enemyBase != null) 
+            { 
+                enemyBase.TakeDamage(finalDamage);
+                Debug.Log($"Daño aplicado: {finalDamage}");
+            }
+
             ReturnToPool();
         }
     }
+
 
     public void SetOriginalPrefab(GameObject prefab)
     {

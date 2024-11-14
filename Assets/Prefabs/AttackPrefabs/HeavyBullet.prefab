@@ -125,3 +125,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   lifeTime: 2
+  baseDamage: 10
+  enemyTag: Enemy
+  playerTag: Player
