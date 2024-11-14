@@ -26,7 +26,7 @@ public class MovementsPlayer : MonoBehaviour
     public bool isDashing = false;
     public bool isAttackinMode = false;
     private bool isWalkingOnWall = false;
-    private bool isAxesInverted = false;
+    public bool isAxesInverted = false;
 
 
     private RaycastHit lastHit;
@@ -84,8 +84,6 @@ public class MovementsPlayer : MonoBehaviour
 
     }
 
-
-
     private void FixedUpdate()
     {
         if (!isDashing)
@@ -94,7 +92,7 @@ public class MovementsPlayer : MonoBehaviour
 
             if (isAxesInverted)
             {
-                movement = new Vector3(-directionPlayer.y, 0, directionPlayer.x);
+                movement = new Vector3(0, 0, directionPlayer.x);
             }
             else
             {
@@ -199,7 +197,20 @@ public class MovementsPlayer : MonoBehaviour
             isDashing = true;
             dashTimeElapsed = 0f;
             dashStartPosition = rb.position;
-            dashTargetPosition = rb.position + transform.forward * variables.dashDistance;
+
+            Vector3 dashDirection = transform.forward;
+            float dashDistance = variables.dashDistance;
+
+            RaycastHit hit;
+            if (Physics.Raycast(rb.position, dashDirection, out hit, dashDistance))
+            {
+                dashTargetPosition = hit.point - dashDirection * 0.1f;
+            }
+            else
+            {
+
+                dashTargetPosition = rb.position + dashDirection * dashDistance;
+            }
         }
     }
 
@@ -207,7 +218,7 @@ public class MovementsPlayer : MonoBehaviour
     {
         attackModeCamera.MoveTarget();
 
-        if (!isAttackinMode)
+        if (!isAttackinMode && !isAxesInverted)
         {
             isAttackinMode = true;
         }
@@ -289,6 +300,11 @@ public class MovementsPlayer : MonoBehaviour
     public void ToggleAxesInversion(bool inverted)
     {
         isAxesInverted = inverted;
+        Alinear();
     }
 
+    public void Alinear()
+    {
+        transform.rotation = Quaternion.Euler(0, 90, 0);
+    }
 }

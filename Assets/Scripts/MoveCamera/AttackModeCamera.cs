@@ -6,6 +6,7 @@ using UnityEngine;
 public class AttackModeCamera : MonoBehaviour
 {   
     public HudManager HudManager;
+    public MovementsPlayer variables;
     private Vector3 inicialPosition;
     private Vector3 FinalPosition;
     private Vector3 currentPosition;
@@ -36,7 +37,10 @@ public class AttackModeCamera : MonoBehaviour
         if (targetPosition == inicialPosition)
         {
             targetPosition = FinalPosition;
-            HudManager.TargetVisibility(true);
+            if (!variables.isAxesInverted)
+            {
+                HudManager.TargetVisibility(true); 
+            }
         }
         else
         {

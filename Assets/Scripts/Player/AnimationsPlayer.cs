@@ -24,8 +24,16 @@ public class AnimationsPlayer : MonoBehaviour
 
     private void WalkAnimations()
     {
-        animator.SetFloat("MoveX", movementsPlayer.directionPlayer.x);
-        animator.SetFloat("MoveZ", movementsPlayer.directionPlayer.y);
+        if (!movementsPlayer.isAxesInverted)
+        {
+            animator.SetFloat("MoveX", movementsPlayer.directionPlayer.x);
+            animator.SetFloat("MoveZ", movementsPlayer.directionPlayer.y);
+        }
+        else 
+        {
+            animator.SetFloat("MoveX", movementsPlayer.directionPlayer.x);
+            animator.SetFloat("MoveZ", 0.0f);
+        }
     }
 
     private void ActivateRun()

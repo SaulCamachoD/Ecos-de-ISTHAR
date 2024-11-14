@@ -15,10 +15,16 @@ public class PlayerSettings : MonoBehaviour
     public float jumpForce;
     public float jumpForwardForce;
 
-    [Header("Player dash Force")]
+    [Header ("Player dash Force")]
     public float dashDistance;
     public float dashDuration;
+    public float dashForce;
 
+    [Header("Skills and Health")]
+    public float health;
+    public float Energy;
+    public float DamageBulltA;
+    public float DamageBulltB;
 
     public float wallGravity;
 }
