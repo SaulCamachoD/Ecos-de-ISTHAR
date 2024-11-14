@@ -9,7 +9,7 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Enemy Stats")]
     [SerializeField] private float maxHealth = 100f;
     public float moveSpeed = 5f;
-    private float _currentHealth;
+    public float _currentHealth;
     
 
     [Header("Energy Management")]

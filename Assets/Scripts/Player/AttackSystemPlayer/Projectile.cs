@@ -6,12 +6,13 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
-    public float damage = 10f;
+    public float baseDamage = 10f;
     
     
     private float lifeTimer;
     private GameObject originalPrefab;
-    public String targetTag;
+    public string enemyTag;
+    public string playerTag;
 
     private void OnEnable()
     {
@@ -31,16 +32,25 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(targetTag))
+        
+        if (other.CompareTag(enemyTag))
         {
-            Debug.Log($"Impacto en {targetTag}");
+            
+            BodyPart bodyPart = other.GetComponent<BodyPart>();
+            float damageMultiplier = bodyPart != null ? bodyPart.damageMultiplier : 1f;
+            float finalDamage = baseDamage * damageMultiplier;
 
-            EnemyBase enemyBase = GetComponent<EnemyBase>();
-            enemyBase.TakeDamage(damage);
-           
+            EnemyBase enemyBase = other.GetComponentInParent<EnemyBase>();
+            if (enemyBase != null) 
+            { 
+                enemyBase.TakeDamage(finalDamage);
+                Debug.Log($"Daño aplicado: {finalDamage}");
+            }
+
             ReturnToPool();
         }
     }
+
 
     public void SetOriginalPrefab(GameObject prefab)
     {

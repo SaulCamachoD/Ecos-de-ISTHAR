@@ -42,7 +42,7 @@ public class EnemyTypeA : EnemyBase
             projectile.transform.rotation = Quaternion.LookRotation(direction);
             var projectileScript = projectile.GetComponent<Projectile>();
                 projectileScript.SetOriginalPrefab(projectilePrefab);
-                projectileScript.targetTag = "Player";
+                projectileScript.playerTag = "Player";
         }
     }
 
