@@ -3,15 +3,14 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 {
     public PlayerSettings variables;
-
-     private void Awake()
+    void Start()
     {
-        variables.health = variables.healthMax;
+        
     }
 
-    public void TakeDamage(float damage)
+    // Update is called once per frame
+    void Update()
     {
-        variables.health -= damage;
+        
     }
-    
 }
