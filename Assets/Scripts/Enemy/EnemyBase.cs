@@ -10,12 +10,12 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     public float damage;
     public float moveSpeed = 5f;
-     public float currentHealth;
-    
+    public float currentHealth;
+    public GameObject prefabEnemy;
 
     [Header("Energy Management")]
     [SerializeField] private float maxEnergy = 50f;
-    private float _currentEnergy;
+    public float currentEnergy;
     [SerializeField] private float energyRechargeRate = 5f;
     [SerializeField] private float energyCostPerAttack = 10f;
     
@@ -26,21 +26,27 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private float attackCooldown = 1.5f;
     
     private float _nextAttackTime;
+    public event Action <GameObject> OnEnemyDeath;
+
+    private Animator _animator;
     
-    
-    private Animation _animation;
 
     public float SightRange => sightRange;
-    public float CurrentEnergy => _currentEnergy;
+    public float CurrentEnergy => currentEnergy;
     public float AttackRange => attackRange;
  
 
     protected virtual void Awake()
     {
-    
-        _animation = GetComponent<Animation>();
-        InitializeStats();
+
+        _animator = GetComponentInChildren<Animator>();
+       InitializeStats();
         
+    }
+
+    private void OnEnable()
+    {
+        InitializeStats();
     }
 
     protected virtual void Start()
@@ -56,14 +62,19 @@ public abstract class EnemyBase : MonoBehaviour
     private void InitializeStats()
     {
         currentHealth = maxHealth;
-        _currentEnergy = maxEnergy;
+        currentEnergy = maxEnergy;
     }
 
     
     public void PerformAttack(Transform player)
     {
-        Attack(player);
-        ConsumeEnergyForAttack();
+        if (CanAttack())
+        {
+            _animator.SetTrigger("Attack");
+            Attack(player);
+            ConsumeEnergyForAttack();
+        }
+        
     }
 
     public void PerformMoveTowardsPlayer(Transform player)
@@ -79,21 +90,21 @@ public abstract class EnemyBase : MonoBehaviour
 
     private void RechargeEnergy()
     {
-        if (_currentEnergy < maxEnergy)
+        if (currentEnergy < maxEnergy)
         {
-            _currentEnergy += energyRechargeRate * Time.deltaTime;
-            _currentEnergy = Mathf.Clamp(_currentEnergy, 0, maxEnergy);
+            currentEnergy += energyRechargeRate * Time.deltaTime;
+            currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
         }
     }
 
     protected internal bool CanAttack()
     {
-        return Time.time >= _nextAttackTime && _currentEnergy >= energyCostPerAttack;
+        return Time.time >= _nextAttackTime && currentEnergy >= energyCostPerAttack;
     }
 
     protected void ConsumeEnergyForAttack()
     {
-        _currentEnergy -= energyCostPerAttack;
+        currentEnergy -= energyCostPerAttack;
         _nextAttackTime = Time.time + attackCooldown;
     }
 
@@ -108,7 +119,9 @@ public abstract class EnemyBase : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        
+        OnEnemyDeath?.Invoke(gameObject);
+        ProjectilePool.Instance.ReturnProjectile(gameObject,prefabEnemy);
     }
 }
 

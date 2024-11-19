@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2386467517263924199}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,13 +52,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  damage: 5
   moveSpeed: 5
+  currentHealth: 0
+  prefabEnemy: {fileID: 0}
   maxEnergy: 100
+  currentEnergy: 0
   energyRechargeRate: 2
-  energyCostPerAttack: 30
+  energyCostPerAttack: 10
   attackRange: 9
-  sightRange: 10
-  attackCooldown: 5
+  sightRange: 15
+  attackCooldown: 1
   projectileSpawnPoint: {fileID: 4646402758938945269}
   projectilePrefab: {fileID: 2939022073730717899, guid: 7bae7e47cafe6c54d9124ff347a1fc96, type: 3}
 --- !u!114 &8257379348525323691
@@ -135,7 +139,7 @@ Transform:
   m_GameObject: {fileID: 3952792024843246729}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.406, z: 0.439}
+  m_LocalPosition: {x: 0, y: 0.406, z: 0.677}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -154,7 +158,7 @@ GameObject:
   - component: {fileID: 8859847910148704528}
   m_Layer: 0
   m_Name: TorsoCollision
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -168,7 +172,7 @@ Transform:
   m_GameObject: {fileID: 4058758502468703763}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: -0.017, z: 0}
+  m_LocalPosition: {x: -0.01, y: -0.166, z: 0.036}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -193,8 +197,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25
-  m_Height: 1.33
+  m_Radius: 0.37
+  m_Height: 1.54
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8859847910148704528
@@ -223,7 +227,7 @@ GameObject:
   - component: {fileID: 7171722788737456603}
   m_Layer: 0
   m_Name: HeadCollision
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -262,7 +266,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.14
+  m_Radius: 0.17
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7171722788737456603
 MonoBehaviour:

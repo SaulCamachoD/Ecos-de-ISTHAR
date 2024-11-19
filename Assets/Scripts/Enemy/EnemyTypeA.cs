@@ -10,8 +10,7 @@ public class EnemyTypeA : EnemyBase
     public GameObject projectilePrefab;
    
    
-
-
+    
 
     protected override void Awake()
     {
@@ -49,7 +48,7 @@ public class EnemyTypeA : EnemyBase
     }
 
 
-    public void ShootEnemy()
+    public void ShootEnemy(Transform player)
     {
         
     }

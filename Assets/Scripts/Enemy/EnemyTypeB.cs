@@ -49,7 +49,7 @@ public class EnemyTypeB : EnemyBase
     {
         if (CanAttack())
         {
-            Debug.Log("te ataco en B");
+            
         }
     }
 }
