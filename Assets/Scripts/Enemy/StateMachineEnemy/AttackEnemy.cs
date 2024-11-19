@@ -32,7 +32,7 @@ namespace Enemy
                 else if (!_enemyAI.CanAttack())
                 {
                     _isAttacking = false;
-                    _enemyAI.StopAnimation("Attack");
+                    _enemyAI.SetAnimationTrigger("Idle");
                 }
                 
             }
