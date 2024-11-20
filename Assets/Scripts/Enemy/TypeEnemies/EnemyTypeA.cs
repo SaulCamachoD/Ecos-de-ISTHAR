@@ -9,8 +9,8 @@ public class EnemyTypeA : EnemyBase
     public Transform projectileSpawnPoint;
     public GameObject projectilePrefab;
    
-
-
+   
+    
 
     protected override void Awake()
     {
@@ -43,11 +43,12 @@ public class EnemyTypeA : EnemyBase
             var projectileScript = projectile.GetComponent<Projectile>();
                 projectileScript.SetOriginalPrefab(projectilePrefab);
                 projectileScript.playerTag = "Player";
+              
         }
     }
 
 
-    public void ShootEnemy()
+    public void ShootEnemy(Transform player)
     {
         
     }

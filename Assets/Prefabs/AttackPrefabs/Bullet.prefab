@@ -122,11 +122,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e63c69a076fee1f4ea201d2405d4c540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 40
   lifeTime: 2
   baseDamage: 10
   enemyTag: Enemy
   playerTag: Player
+  objectTag: Breakable
 --- !u!54 &-2449855443287605044
 Rigidbody:
   m_ObjectHideFlags: 0
