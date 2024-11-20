@@ -1,16 +1,18 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class HealthSystem : MonoBehaviour
 {
-    public PlayerSettings variables;
-    void Start()
-    {
-        
-    }
+   public PlayerSettings playerSettings;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   private void Awake()
+   {
+      playerSettings.health = playerSettings.healthMax;
+   }
+
+   public void TakeDamage(float damage)
+   {
+      playerSettings.health -= damage;
+   }
 }

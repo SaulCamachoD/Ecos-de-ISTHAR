@@ -23,6 +23,14 @@ public class EnemyAIcontroller : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         _enemy = GetComponent<EnemyBase>();
         TransitionToState(IdleEnemyState);
+        if (player == null)
+        {
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+            }
+        }
     }
 
     private void Update()
@@ -70,6 +78,11 @@ public class EnemyAIcontroller : MonoBehaviour
         animator.ResetTrigger("Run");
         animator.ResetTrigger("Attack");
         animator.SetTrigger(trigger);
+    }
+
+    public void StopAnimation(string animationName)
+    {
+        animator.ResetTrigger(animationName);
     }
    
 }

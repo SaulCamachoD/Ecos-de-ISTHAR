@@ -49,7 +49,19 @@ public class EnemyTypeB : EnemyBase
     {
         if (CanAttack())
         {
-            Debug.Log("te ataco en B");
+            Vector3 direction = (player.position - transform.position).normalized;
+            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, AttackRange))
+            {
+                Debug.DrawRay(transform.position, direction * AttackRange, Color.green,1f);
+                if (hit.collider.CompareTag("Player"))
+                {
+                    var playerHealth = hit.collider.GetComponent<HealthSystem>();
+                    if (playerHealth != null)
+                    {
+                        playerHealth.TakeDamage(damage);
+                    }
+                }
+            }
         }
     }
 }

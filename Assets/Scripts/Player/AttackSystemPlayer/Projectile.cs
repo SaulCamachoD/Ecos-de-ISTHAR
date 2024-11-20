@@ -1,23 +1,30 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
-    private float lifeTimer;
-    private GameObject originalPrefab;
-
+    public float baseDamage = 10f;
+    private float _lifeTimer;
+    private GameObject _originalPrefab;
+    public string enemyTag;
+    public string playerTag; 
+    public string objectTag;
+    private HealthSystem _healthSystem;
     private void OnEnable()
     {
-        lifeTimer = lifeTime;
+        _lifeTimer = lifeTime;
+        ResetProjectile();
     }
 
     private void Update()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        lifeTimer -= Time.deltaTime;
-        if (lifeTimer <= 0)
+        _lifeTimer -= Time.deltaTime;
+        if (_lifeTimer <= 0)
         {
             ReturnToPool();
         }
@@ -25,23 +32,62 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        
+        if (other.CompareTag(enemyTag) || other.CompareTag(playerTag)|| other.CompareTag(objectTag))
         {
-            Debug.Log("Impacto en enemigo");
-            ReturnToPool();
+            
+           if (other.CompareTag(enemyTag))
+           {
+               BodyPart bodyPart = other.GetComponent<BodyPart>();
+               float damageMultiplier = bodyPart != null ? bodyPart.damageMultiplier : 1f;
+               float finalDamage = baseDamage * damageMultiplier;
+
+               EnemyBase enemyBase = other.GetComponentInParent<EnemyBase>();
+               if (enemyBase != null)
+               {
+                   enemyBase.TakeDamage(finalDamage);
+                   Debug.Log($"Daño aplicado: {finalDamage}");
+               }
+           }
+           else if (other.CompareTag(playerTag))
+           {
+               _healthSystem = other.GetComponentInParent<HealthSystem>();
+               if (_healthSystem != null)
+               {
+                   _healthSystem.TakeDamage(baseDamage);
+                   Debug.Log($"ataque enemigo {baseDamage}");
+               }
+               
+           }
+           else if (other.CompareTag(objectTag))
+           {
+               var breakeable = other.GetComponentInParent<BreakableObject>();
+               if (breakeable != null)
+               {
+                   breakeable.TakeDamage(baseDamage);
+                   Debug.Log($"ataque a objeto {baseDamage}");
+               }
+           }
+
+           ReturnToPool();
         }
     }
 
+
     public void SetOriginalPrefab(GameObject prefab)
     {
-        originalPrefab = prefab;
+        _originalPrefab = prefab;
     }
 
+    private void ResetProjectile()
+    {
+        
+    }
     private void ReturnToPool()
     {
-        if (originalPrefab != null)
+        if (_originalPrefab != null)
         {
-            ProjectilePool.Instance.ReturnProjectile(gameObject, originalPrefab);
+            ProjectilePool.Instance.ReturnProjectile(gameObject, _originalPrefab);
         }
         else
         {

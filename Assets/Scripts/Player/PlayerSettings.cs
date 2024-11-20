@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 public class PlayerSettings : MonoBehaviour
 {
@@ -19,12 +20,16 @@ public class PlayerSettings : MonoBehaviour
     public float dashDistance;
     public float dashDuration;
     public float dashForce;
+    
+
 
     [Header("Skills and Health")]
     public float health;
-    public float Energy;
+    public float healthMax = 100f;
+    public float energy;
     public float DamageBulltA;
     public float DamageBulltB;
+
 
     public float wallGravity;
 }
