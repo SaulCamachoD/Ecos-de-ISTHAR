@@ -128,3 +128,4 @@ MonoBehaviour:
   baseDamage: 10
   enemyTag: Enemy
   playerTag: Player
+  objectTag: Breakable
