@@ -20,6 +20,9 @@ public class MovementsPlayer : MonoBehaviour
     public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
     public float WallDetectionDistance = 1.5f;
+    public float stepHeight = 0.5f;
+    public float stepSmooth = 0.2f;
+    public float stepDetectionDistance = 0.5f;
 
     public bool isRunning;
     public bool isJumping = false;
@@ -136,8 +139,14 @@ public class MovementsPlayer : MonoBehaviour
         if (!isJumping && movementFinal != Vector3.zero)
         {
             RaycastHit hit;
+
+            // Detección de colisiones con un SweepTest
             if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime) || hit.collider.isTrigger)
             {
+                // Detectar y manejar escalones antes de moverse
+                DetectAndHandleSteps(movementFinal, stepHeight, stepSmooth);
+
+                // Mover el personaje
                 rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
             }
         }
@@ -307,4 +316,27 @@ public class MovementsPlayer : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(0, 90, 0);
     }
+
+    private void DetectAndHandleSteps(Vector3 direction, float stepHeight, float stepSmooth)
+    {
+        RaycastHit lowerHit;
+        RaycastHit upperHit;
+
+        // Posición para detectar la base del escalón
+        Vector3 lowerRayOrigin = rb.position + Vector3.up * 0.1f; // Evitar el suelo directamente
+                                                                  // Posición para detectar si hay un obstáculo encima del escalón
+        Vector3 upperRayOrigin = rb.position + Vector3.up * stepHeight;
+
+        // Detectar si hay un escalón en la base
+        if (Physics.Raycast(lowerRayOrigin, direction, out lowerHit, stepDetectionDistance))
+        {
+            // Verificar si hay espacio libre encima del escalón
+            if (!Physics.Raycast(upperRayOrigin, direction, out upperHit, stepDetectionDistance))
+            {
+                // Subir al escalón suavemente
+                rb.position += Vector3.up * stepSmooth;
+            }
+        }
+    }
+
 }
