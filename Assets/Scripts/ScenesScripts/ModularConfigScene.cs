@@ -8,6 +8,7 @@ public class ModularConfigScene : MonoBehaviour
     public Transform[] positions;
     public GameObject[] powerUps;
     public Transform powerUpPosition;
+    public GameObject resetPoint;
     private Quaternion rotation = Quaternion.Euler(0, 180, 0);
 
     private GameObject[] spawnedRooms;
@@ -63,8 +64,11 @@ public class ModularConfigScene : MonoBehaviour
 
     void SpawnPowerUp()
     {
-        int randomIndex = Random.Range(0, powerUps.Length); 
-        spawnedPowerUp = Instantiate(powerUps[randomIndex], powerUpPosition.position, rotation); 
+        int randomIndex = Random.Range(0, powerUps.Length);
+        spawnedPowerUp = Instantiate(powerUps[randomIndex], powerUpPosition.position, rotation);
+
+        PowerupsActive powerupScript = spawnedPowerUp.GetComponent<PowerupsActive>();
+        powerupScript.SetResetPoint(resetPoint);
     }
     GameObject InstantiateRandom(GameObject[] stageArray, Transform spawnPoint)
     {

@@ -57,13 +57,13 @@ Material:
     - _Foam_Speed: 0.34
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Refraction_Scale: 6.18
-    - _Refraction_Speed: 0.38
-    - _Refraction_Streght: 0.44
-    - _WaterDepht: 13.71
+    - _Refraction_Scale: 7.3
+    - _Refraction_Speed: 0.17
+    - _Refraction_Streght: 0.97
+    - _WaterDepht: 15.86
     m_Colors:
-    - _DepthColor: {r: 0.47882485, g: 0.9339623, b: 0.11013702, a: 0.7529412}
-    - _Foam_Color: {r: 0.15094337, g: 0.14514568, b: 0.14453539, a: 0.92156863}
-    - _surfaceColor: {r: 0.23784262, g: 0.9622641, b: 0.013616922, a: 0.45490196}
+    - _DepthColor: {r: 0.10980392, g: 0.527692, b: 0.90588236, a: 1}
+    - _Foam_Color: {r: 0.6320754, g: 0.58139014, b: 0.58139014, a: 0.28235295}
+    - _surfaceColor: {r: 0.58272517, g: 0.9150943, b: 0.86294466, a: 0.45490196}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4232592606505228323}
   - component: {fileID: 5664317418683612097}
   - component: {fileID: 2367728382437615891}
+  - component: {fileID: 3415024657199464208}
   m_Layer: 0
   m_Name: pow3
   m_TagString: Untagged
@@ -108,3 +109,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3415024657199464208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496136828651341269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ae6b5a1931f184bb71c3e0f70f1f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ResetPoint: {fileID: 0}
