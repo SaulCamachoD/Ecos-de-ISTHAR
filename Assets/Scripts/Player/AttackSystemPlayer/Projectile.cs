@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
     public string enemyTag;
     public string playerTag; 
     public string objectTag;
+    public string bossTag;
     private HealthSystem _healthSystem;
     private void OnEnable()
     {
@@ -33,8 +34,8 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.CompareTag(enemyTag) || other.CompareTag(playerTag)|| other.CompareTag(objectTag))
-        {
+        
+        
             
            if (other.CompareTag(enemyTag))
            {
@@ -68,9 +69,15 @@ public class Projectile : MonoBehaviour
                    Debug.Log($"ataque a objeto {baseDamage}");
                }
            }
+           else if (other.CompareTag(bossTag))
+           {
+               
+               
+           }
+           
 
            ReturnToPool();
-        }
+        
     }
 
 
