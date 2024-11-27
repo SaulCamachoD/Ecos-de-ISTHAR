@@ -9,10 +9,11 @@ public class PowerupsActive : MonoBehaviour
     {
         ResetPoint = resetPoint;
     }
-    private void OnCollisionEnter(Collision collision)
+ 
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player")
-        {   
+        if (other.gameObject.tag == "Player")
+        {
             ResetPoint.SetActive(true);
             print("Se Activo el powerUp");
             Destroy(gameObject);

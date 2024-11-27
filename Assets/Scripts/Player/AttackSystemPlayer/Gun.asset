@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gun
   m_EditorClassIdentifier: 
   weaponName: Gun
-  projectilePrefab: {fileID: 3210595578564856246, guid: 7d6f67d0d50b423489205971514cfb26, type: 3}
-  fireRate: 3
+  projectilePrefab: {fileID: 5417555443763137215, guid: 5cff53b2dfecb664fb1d6456d17c8d18, type: 3}
+  fireRate: 0.5
   maxAmmo: 40
-  isAutomatic: 1
+  isAutomatic: 0
