@@ -23,6 +23,7 @@ public class MovementsPlayer : MonoBehaviour
     public float stepHeight = 0.5f;
     public float stepSmooth = 0.2f;
     public float stepDetectionDistance = 0.5f;
+    public WeaponVFX weaponVFX;
 
     public bool isRunning;
     public bool isJumping = false;
@@ -51,6 +52,7 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.AttackMode.started += MoveTargetCam;
         controls.InputsPlayer.Attack.performed += FireWeapon;
         controls.InputsPlayer.Attack.canceled += StopFireWeapon;
+        controls.InputsPlayer.Attack.canceled += Prube;
         controls.InputsPlayer.ChangeWeapon.started += ChangeWeapon;
     }
 
@@ -65,6 +67,7 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.AttackMode.started -= MoveTargetCam;
         controls.InputsPlayer.Attack.performed -= FireWeapon;
         controls.InputsPlayer.Attack.canceled -= FireWeapon;
+        controls.InputsPlayer.Attack.canceled -= StopFireWeapon;
         controls.InputsPlayer.ChangeWeapon.started -= ChangeWeapon;
     }
 
@@ -290,11 +293,29 @@ public class MovementsPlayer : MonoBehaviour
     {
         if (isAttackinMode)
         {
-            weaponController.Fire(true);
+            if (weaponController.GetCurrentWeaponIndex() != 1)
+            {
+                weaponController.Fire(true);
+            }
+            else 
+            { 
+                weaponVFX.PlayMuzzleFlash();
+            }
         }
     }
     private void StopFireWeapon(InputAction.CallbackContext context)
     {
+        if (weaponController.GetCurrentWeaponIndex() == 1)
+        {
+            weaponController.HeavyAttack(true);
+            weaponController.Fire(true);
+            weaponVFX.StopMuzzleFlash();
+        }
+        else
+        {
+            weaponController.HeavyAttack(false);
+        }
+
         weaponController.Fire(false);
     }
 
@@ -322,21 +343,22 @@ public class MovementsPlayer : MonoBehaviour
         RaycastHit lowerHit;
         RaycastHit upperHit;
 
-        // Posición para detectar la base del escalón
-        Vector3 lowerRayOrigin = rb.position + Vector3.up * 0.1f; // Evitar el suelo directamente
-                                                                  // Posición para detectar si hay un obstáculo encima del escalón
+       
+        Vector3 lowerRayOrigin = rb.position + Vector3.up * 0.1f; 
         Vector3 upperRayOrigin = rb.position + Vector3.up * stepHeight;
 
-        // Detectar si hay un escalón en la base
         if (Physics.Raycast(lowerRayOrigin, direction, out lowerHit, stepDetectionDistance))
         {
-            // Verificar si hay espacio libre encima del escalón
             if (!Physics.Raycast(upperRayOrigin, direction, out upperHit, stepDetectionDistance))
             {
-                // Subir al escalón suavemente
                 rb.position += Vector3.up * stepSmooth;
             }
         }
+    }
+
+    private void Prube(InputAction.CallbackContext context)
+    {
+        print("luz");
     }
 
 }

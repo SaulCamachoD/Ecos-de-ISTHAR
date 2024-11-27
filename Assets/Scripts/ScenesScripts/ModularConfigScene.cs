@@ -13,6 +13,7 @@ public class ModularConfigScene : MonoBehaviour
 
     private GameObject[] spawnedRooms;
     private GameObject spawnedPowerUp;
+    private int currentPowerUpIndex = 0;
     void Start()
     {
         SpawnStages();
@@ -64,9 +65,8 @@ public class ModularConfigScene : MonoBehaviour
 
     void SpawnPowerUp()
     {
-        int randomIndex = Random.Range(0, powerUps.Length);
-        spawnedPowerUp = Instantiate(powerUps[randomIndex], powerUpPosition.position, rotation);
-
+        spawnedPowerUp = Instantiate(powerUps[currentPowerUpIndex], powerUpPosition.position, rotation);
+        currentPowerUpIndex = (currentPowerUpIndex + 1) % powerUps.Length;
         PowerupsActive powerupScript = spawnedPowerUp.GetComponent<PowerupsActive>();
         powerupScript.SetResetPoint(resetPoint);
     }
