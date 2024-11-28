@@ -29,8 +29,10 @@ public class MovementsPlayer : MonoBehaviour
     public bool isJumping = false;
     public bool isDashing = false;
     public bool isAttackinMode = false;
-    private bool isWalkingOnWall = false;
+    public bool isWalkingOnWall = false;
     public bool isAxesInverted = false;
+    public bool WallRight = false;
+    public bool Wallleft = false;
 
 
     private RaycastHit lastHit;
@@ -52,7 +54,6 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.AttackMode.started += MoveTargetCam;
         controls.InputsPlayer.Attack.performed += FireWeapon;
         controls.InputsPlayer.Attack.canceled += StopFireWeapon;
-        controls.InputsPlayer.Attack.canceled += Prube;
         controls.InputsPlayer.ChangeWeapon.started += ChangeWeapon;
     }
 
@@ -243,6 +244,8 @@ public class MovementsPlayer : MonoBehaviour
 
     private void RunWall()
     {
+        Wallleft = Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer);
+        WallRight = Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer);
         if (Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer) ||
             Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer))
         {
@@ -354,11 +357,6 @@ public class MovementsPlayer : MonoBehaviour
                 rb.position += Vector3.up * stepSmooth;
             }
         }
-    }
-
-    private void Prube(InputAction.CallbackContext context)
-    {
-        print("luz");
     }
 
 }
