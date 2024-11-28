@@ -19,7 +19,9 @@ public class AnimationsPlayer : MonoBehaviour
         ActivateJump(movementsPlayer.isJumping); 
         ActivateDash(movementsPlayer.isDashing);
         ActivateAttackMode(movementsPlayer.isAttackinMode);
-        
+        ActivateWallkingWall(movementsPlayer.isWalkingOnWall);
+
+
     }
 
     private void WalkAnimations()
@@ -53,6 +55,10 @@ public class AnimationsPlayer : MonoBehaviour
     private void ActivateAttackMode(bool enter)
     {
         animator.SetBool("AttackMode" , enter);
+    }
+    private void ActivateWallkingWall(bool enter)
+    {
+        animator.SetBool("IsWalkinginWall", enter);
     }
 
 }
