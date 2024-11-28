@@ -31,6 +31,8 @@ public class MovementsPlayer : MonoBehaviour
     public bool isAttackinMode = false;
     public bool isWalkingOnWall = false;
     public bool isAxesInverted = false;
+    public bool WallRight = false;
+    public bool Wallleft = false;
 
 
     private RaycastHit lastHit;
@@ -242,6 +244,8 @@ public class MovementsPlayer : MonoBehaviour
 
     private void RunWall()
     {
+        Wallleft = Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer);
+        WallRight = Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer);
         if (Physics.Raycast(transform.position, transform.right, out lastHit, WallDetectionDistance, wallLayer) ||
             Physics.Raycast(transform.position, -transform.right, out lastHit, WallDetectionDistance, wallLayer))
         {
