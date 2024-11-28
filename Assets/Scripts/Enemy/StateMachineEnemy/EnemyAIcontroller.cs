@@ -23,15 +23,22 @@ public class EnemyAIcontroller : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         _enemy = GetComponent<EnemyBase>();
         TransitionToState(IdleEnemyState);
+
         if (player == null)
         {
             GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
             if (playerObject != null)
             {
                 player = playerObject.transform;
+                Debug.Log($"Jugador encontrado: {player.name}");
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player'.");
             }
         }
     }
+
 
     private void Update()
     {
