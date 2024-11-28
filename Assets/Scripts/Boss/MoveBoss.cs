@@ -15,12 +15,14 @@ public class MoveBoss : MonoBehaviour
       _navMeshAgent.speed = speed;
    }
 
+   private void Update()
+   {
+      MoveTowardPLayer();
+   }
+
    private void MoveTowardPLayer()
    {
-      if (_navMeshAgent != null)
-      {
          _navMeshAgent.SetDestination(player.position);   
-      }
       
    }
    

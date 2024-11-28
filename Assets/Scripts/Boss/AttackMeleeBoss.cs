@@ -8,40 +8,49 @@ public class AttackMeleeBoss : MonoBehaviour
     [SerializeField] private Transform pointAttack;
     [SerializeField] private float attackRadius;
     [SerializeField] private float distanceAttack;
-    private LayerMask _layerMaskPlayer;
-    private Animator _animator;
+    [SerializeField] private float attackCooldown = 2.0f;
+    [SerializeField] private Transform playerTransform;
+    private bool canAttack = true;
+    
+
+    
 
 
-    private void Start()
+    private void Update()
     {
-        _animator = GetComponent<Animator>();
+       Punch();
     }
 
-
-    private void Attack()
+    private void Punch()
     {
-
-        if (distanceAttack < 15 )
+        if (canAttack)
         {
-            Punch();
+            float distanceToplayer = Vector3.Distance(transform.position, playerTransform.position);
+
+            if (distanceToplayer <= distanceAttack)
+            {
+                Collider[] hit = Physics.OverlapSphere(pointAttack.position, attackRadius);
+
+                foreach (var hitC in hit)
+                    if (hitC.TryGetComponent<HealthSystem>(out var healthSystem))
+                    {
+                        healthSystem.TakeDamage(damage);
+                        Debug.Log($"boss a hecho la cantidad de {damage} de daño");
+                    }
+
+                canAttack = false;
+                Invoke(nameof(ResetAttack), attackCooldown);
+
+            }
+
         }
-        
-        
+    }
+
+    private void ResetAttack()
+    {
+        canAttack = true;
     }
     
-    private void Punch()
-    { 
-        Collider[] hit = Physics.OverlapSphere(pointAttack.position, attackRadius,_layerMaskPlayer);
-
-        foreach (var hitC in hit)
-        {
-            hitC.GetComponent<HealthSystem>().TakeDamage(damage);
-            Debug.Log($"boss a hecho la cantidad de {damage} de daño");
-        }
-        
-        
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(pointAttack.position,attackRadius);
