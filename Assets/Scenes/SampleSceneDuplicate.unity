@@ -1324,6 +1324,7 @@ MonoBehaviour:
   variables: {fileID: 157574822}
   attackModeCamera: {fileID: 1379997275}
   weaponController: {fileID: 1938251152}
+  animationsPlayer: {fileID: 0}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -12333,7 +12334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439055546453022696, guid: b4d1b62ac1f371c4485b4707d61a271c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00135
       objectReference: {fileID: 0}
     - target: {fileID: 5439055546453022696, guid: b4d1b62ac1f371c4485b4707d61a271c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18479,7 +18480,7 @@ GameObject:
   - component: {fileID: 1382205323}
   - component: {fileID: 1382205322}
   - component: {fileID: 1382205326}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20979,6 +20980,7 @@ MonoBehaviour:
   variables: {fileID: 1460146343}
   attackModeCamera: {fileID: 1379997275}
   weaponController: {fileID: 1938251152}
+  animationsPlayer: {fileID: 1460146341}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -21013,13 +21015,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   speedSprint: 6
-  wallRunSpeed: 4
+  wallRunSpeed: 6
   rotationSpeed: 10
   jumpForce: 7
   jumpForwardForce: 10
-  dashDistance: 5
-  dashDuration: 0.4
-  dashForce: 10
+  dashDistance: 8
+  dashDuration: 0.6
+  dashForce: 12
   health: 0
   healthMax: 100
   energy: 0
@@ -24074,12 +24076,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapons:
-  - {fileID: 11400000, guid: 86affc4333dbfad4b8e96cfec5bb61af, type: 2}
-  - {fileID: 11400000, guid: 8e8d80f4577666042a44631ae1c7b9cb, type: 2}
   - {fileID: 11400000, guid: 22d79df53c83a9d4ca721d6688e7900f, type: 2}
-  - {fileID: 11400000, guid: c8d79b487b806634f983d4feb29d6075, type: 2}
-  - {fileID: 11400000, guid: d7f689a59123c514c87e8b69c0818970, type: 2}
-  - {fileID: 11400000, guid: 14722c31da924ce49b84ff6bd98e588f, type: 2}
+  - {fileID: 11400000, guid: 8e8d80f4577666042a44631ae1c7b9cb, type: 2}
   attackingHeavy: 0
   mainCamera: {fileID: 399444048}
   directionOffset: 0.8
@@ -24092,7 +24090,7 @@ Transform:
   m_GameObject: {fileID: 1938251150}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.09, z: 0.81}
+  m_LocalPosition: {x: 0.112, y: 1.534, z: 0.553}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
