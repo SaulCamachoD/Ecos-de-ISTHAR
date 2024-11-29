@@ -8,6 +8,7 @@ public class EnemyTypeB : EnemyBase
     [SerializeField] private float detectionDistance = 5.0f;
     [SerializeField] private float avoidanceStrength = 3.0f;
     [SerializeField] private float reattemptInterval = 1.0f;
+    [SerializeField] private float rotationSpeed = 5.0f; // Velocidad de rotación
 
     private Vector3 _currentTarget;
     private float _reattemptTimer;
@@ -17,19 +18,18 @@ public class EnemyTypeB : EnemyBase
     {
         float targetY = Mathf.Clamp(player.position.y + minAltitude, minAltitude, maxAltitude);
         Vector3 direction = (player.position - transform.position).normalized;
-        
+
         Vector3 targetPosition = new Vector3(player.position.x, targetY, player.position.z);
 
-       
         Debug.DrawRay(transform.position, direction * detectionDistance, Color.red);
 
-        
+        // Evitar obstáculos
         if (Physics.Raycast(transform.position, direction, out RaycastHit hit, detectionDistance))
         {
             _lastAvoidanceDirection *= -1;
             Vector3 horizontalAvoidanceDirection = Vector3.Cross(hit.normal, Vector3.up).normalized;
-            horizontalAvoidanceDirection.y = 0; 
-            
+            horizontalAvoidanceDirection.y = 0;
+
             _currentTarget = transform.position + horizontalAvoidanceDirection * avoidanceStrength * _lastAvoidanceDirection;
             _reattemptTimer = reattemptInterval;
         }
@@ -41,8 +41,17 @@ public class EnemyTypeB : EnemyBase
         {
             _reattemptTimer -= Time.deltaTime;
         }
-        
+
+       
         transform.position = Vector3.MoveTowards(transform.position, _currentTarget, moveSpeed * Time.deltaTime);
+
+       
+        Vector3 lookDirection = _currentTarget - transform.position;
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     protected override void Attack(Transform player)
@@ -52,7 +61,7 @@ public class EnemyTypeB : EnemyBase
             Vector3 direction = (player.position - transform.position).normalized;
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, AttackRange))
             {
-                Debug.DrawRay(transform.position, direction * AttackRange, Color.green,1f);
+                Debug.DrawRay(transform.position, direction * AttackRange, Color.green, 1f);
                 if (hit.collider.CompareTag("Player"))
                 {
                     var playerHealth = hit.collider.GetComponent<HealthSystem>();

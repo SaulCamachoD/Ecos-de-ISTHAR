@@ -30,12 +30,9 @@ public class EnemyAIcontroller : MonoBehaviour
             if (playerObject != null)
             {
                 player = playerObject.transform;
-                Debug.Log($"Jugador encontrado: {player.name}");
+                
             }
-            else
-            {
-                Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player'.");
-            }
+           
         }
     }
 

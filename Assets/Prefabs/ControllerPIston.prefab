@@ -199,6 +199,6 @@ MonoBehaviour:
   speedDown: 5
   waitTimeAtTop: 1
   waitTimeAtBottom: 0.5
-  pistonTransform: {fileID: 3391076813943141617}
+  pistonTransform: {fileID: 1870618519127224715}
   topPoint: {fileID: 6682177518650489493}
   bottomPoint: {fileID: 2483138168611975179}
