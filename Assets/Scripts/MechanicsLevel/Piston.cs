@@ -9,6 +9,7 @@ public class Piston : MonoBehaviour
     public float waitTimeAtTop = 1f; // Tiempo en la posición superior
     public float waitTimeAtBottom = 0.5f; // Tiempo en la posición inferior
 
+    [SerializeField]private Transform pistonTransform;
     private Vector3 startPoint;
     private Vector3 endPoint;
     private bool movingUp = false;
@@ -22,7 +23,7 @@ public class Piston : MonoBehaviour
     {
         startPoint = bottomPoint.position;
         endPoint = topPoint.position;
-        transform.position = startPoint;
+        pistonTransform.position = startPoint;
     }
 
     private void Update()
@@ -42,10 +43,10 @@ public class Piston : MonoBehaviour
     private void MoveCrusher(Vector3 target, float speed, float waitTime)
     {
         // Movimiento del machacador hacia el objetivo
-        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        pistonTransform.position = Vector3.MoveTowards(pistonTransform.position, target, speed * Time.deltaTime);
 
         // Verificar si llegó al objetivo
-        if (Vector3.Distance(transform.position, target) <= 0.01f)
+        if (Vector3.Distance(pistonTransform.position, target) <= 0.01f)
         {
             StartCoroutine(WaitBeforeSwitchingDirection(waitTime));
         }

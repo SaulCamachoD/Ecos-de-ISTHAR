@@ -16,8 +16,8 @@ TagManager:
   - UI
   - Box
   - Wall
-  - 
-  - 
+  - Walkable
+  - NonWalkable
   - 
   - 
   - 
