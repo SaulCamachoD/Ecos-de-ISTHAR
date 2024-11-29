@@ -15,5 +15,6 @@ MonoBehaviour:
   weaponName: Gun
   projectilePrefab: {fileID: 5417555443763137215, guid: 5cff53b2dfecb664fb1d6456d17c8d18, type: 3}
   fireRate: 0.5
+  energyCost: 15
   maxAmmo: 40
   isAutomatic: 0

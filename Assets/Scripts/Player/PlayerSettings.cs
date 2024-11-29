@@ -26,7 +26,7 @@ public class PlayerSettings : MonoBehaviour
     [Header("Skills and Health")]
     public float health;
     public float healthMax = 100f;
-    public float energy;
+    public float energy = 100f;
     public float DamageBulltA;
     public float DamageBulltB;
 

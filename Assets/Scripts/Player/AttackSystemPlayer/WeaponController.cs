@@ -11,6 +11,8 @@ public class WeaponController : MonoBehaviour
     public Camera mainCamera;
     public float directionOffset = 0f;
 
+    public EnergyManager energyManager;
+
     private void Update()
     {
         if (attacking)
@@ -41,17 +43,23 @@ public class WeaponController : MonoBehaviour
 
     private void FireProjectile(WeaponData weapon)
     {
-        GameObject projectile = ProjectilePool.Instance.GetProjectile(weapon.projectilePrefab);
-        projectile.transform.position = transform.position;
+        if (energyManager.CurrentEnergy >= weapon.energyCost) 
+        {
+            
+            energyManager.DecreaseEnergy(weapon.energyCost);
 
-        Vector3 fireDirection = mainCamera.transform.forward;
+            GameObject projectile = ProjectilePool.Instance.GetProjectile(weapon.projectilePrefab);
+            projectile.transform.position = transform.position;
 
-        Quaternion offsetRotation = Quaternion.Euler(0, directionOffset, 0);
-        fireDirection = offsetRotation * fireDirection;
+            Vector3 fireDirection = mainCamera.transform.forward;
 
-        projectile.transform.rotation = Quaternion.LookRotation(fireDirection);
+            Quaternion offsetRotation = Quaternion.Euler(0, directionOffset, 0);
+            fireDirection = offsetRotation * fireDirection;
 
-        projectile.GetComponent<Projectile>().SetOriginalPrefab(weapon.projectilePrefab);
+            projectile.transform.rotation = Quaternion.LookRotation(fireDirection);
+
+            projectile.GetComponent<Projectile>().SetOriginalPrefab(weapon.projectilePrefab);
+        }
     }
 
     public void Fire(bool isAttacknow)
