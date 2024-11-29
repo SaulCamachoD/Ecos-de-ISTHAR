@@ -15,5 +15,6 @@ MonoBehaviour:
   weaponName: EnergyBall2
   projectilePrefab: {fileID: 1136901190255674604, guid: 412dd89a7a8d97543b729856ea01dbad, type: 3}
   fireRate: 3
+  energyCost: 3
   maxAmmo: 20
   isAutomatic: 1

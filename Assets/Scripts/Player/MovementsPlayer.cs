@@ -16,6 +16,7 @@ public class MovementsPlayer : MonoBehaviour
     public PlayerSettings variables;
     public AttackModeCamera attackModeCamera;
     public WeaponController weaponController;
+    public AnimationsPlayer animationsPlayer;
     public LayerMask obstacleLayer;
     public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
@@ -299,6 +300,7 @@ public class MovementsPlayer : MonoBehaviour
             if (weaponController.GetCurrentWeaponIndex() != 1)
             {
                 weaponController.Fire(true);
+                animationsPlayer.ActivateGun(true);
             }
             else 
             { 
@@ -312,11 +314,13 @@ public class MovementsPlayer : MonoBehaviour
         {
             weaponController.HeavyAttack(true);
             weaponController.Fire(true);
+            animationsPlayer.Shot();
             weaponVFX.StopMuzzleFlash();
         }
         else
         {
             weaponController.HeavyAttack(false);
+            animationsPlayer.ActivateGun(false);
         }
 
         weaponController.Fire(false);

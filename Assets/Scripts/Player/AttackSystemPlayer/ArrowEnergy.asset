@@ -15,5 +15,6 @@ MonoBehaviour:
   weaponName: ArrowEnemrgy
   projectilePrefab: {fileID: 1200550422270214480, guid: ea0ea5a9bec467147a5dab1c65cbf4f9, type: 3}
   fireRate: 3
+  energyCost: 20
   maxAmmo: 10
   isAutomatic: 1

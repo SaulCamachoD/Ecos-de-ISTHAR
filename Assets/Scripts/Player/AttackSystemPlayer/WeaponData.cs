@@ -6,6 +6,7 @@ public class WeaponData : ScriptableObject
     public string weaponName;
     public GameObject projectilePrefab;
     public float fireRate;
+    public float energyCost;
     public int maxAmmo;
     public bool isAutomatic;
 }

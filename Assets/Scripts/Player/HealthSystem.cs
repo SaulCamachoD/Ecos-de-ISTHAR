@@ -15,4 +15,22 @@ public class HealthSystem : MonoBehaviour
    {
       playerSettings.health -= damage;
    }
+
+    public void DecreaseHealth(float amount)
+    {
+        playerSettings.health = Mathf.Max(playerSettings.health - amount, 0f);
+        UpdateHeatlhLevel();
+
+    }
+
+    public void IncreaseHealth(float amount)
+    {
+        playerSettings.health = Mathf.Min(playerSettings.health + amount, playerSettings.energy);
+        UpdateHeatlhLevel();
+    }
+
+    private void UpdateHeatlhLevel()
+    {
+        float energyLevel = playerSettings.health / playerSettings.energy;
+    }
 }

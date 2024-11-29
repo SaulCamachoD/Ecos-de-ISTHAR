@@ -73,4 +73,14 @@ public class AnimationsPlayer : MonoBehaviour
         animator.SetBool("WallLeft", enter);
     }
 
+    public void Shot()
+    {
+        animator.SetTrigger("Bullet1");
+    }
+
+    public void ActivateGun(bool option)
+    {
+        animator.SetBool("Bullet2", option);
+    }
+    
 }
