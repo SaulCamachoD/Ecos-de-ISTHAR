@@ -25,6 +25,8 @@ public class MovementsPlayer : MonoBehaviour
     public float stepSmooth = 0.2f;
     public float stepDetectionDistance = 0.5f;
     public WeaponVFX weaponVFX;
+    public Vector3 movementRelativeToCamera;
+    public float currentSpeed;
 
     public bool isRunning;
     public bool isJumping = false;
@@ -34,6 +36,7 @@ public class MovementsPlayer : MonoBehaviour
     public bool isAxesInverted = false;
     public bool WallRight = false;
     public bool Wallleft = false;
+    public bool CanWalk = false;
 
 
     private RaycastHit lastHit;
@@ -116,8 +119,8 @@ public class MovementsPlayer : MonoBehaviour
             camForward.Normalize();
             camRight.Normalize();
 
-            Vector3 movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
-            float currentSpeed = isRunning ? variables.speedSprint : variables.speed;
+            movementRelativeToCamera = (camForward * movement.z + camRight * movement.x).normalized;
+            currentSpeed = isRunning ? variables.speedSprint : variables.speed;
 
             if (!isWalkingOnWall)
             {
@@ -145,13 +148,20 @@ public class MovementsPlayer : MonoBehaviour
         {
             RaycastHit hit;
 
-            // Detección de colisiones con un SweepTest
-            if (!rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime) || hit.collider.isTrigger)
-            {
-                // Detectar y manejar escalones antes de moverse
-                DetectAndHandleSteps(movementFinal, stepHeight, stepSmooth);
+            // Ejecutar el SweepTest
+            bool didHit = rb.SweepTest(movementFinal, out hit, speed * Time.deltaTime);
 
-                // Mover el personaje
+            // Ignorar colisiones con el Layer "Floor"
+            if (didHit && hit.collider.gameObject.layer == LayerMask.NameToLayer("Floor"))
+            {
+                didHit = false; // Ignorar esta colisión
+            }
+
+            CanWalk = !didHit;
+
+            // Si no hubo colisión o se ignoró, mover el personaje
+            if (!didHit)
+            {
                 rb.MovePosition(rb.position + Time.deltaTime * speed * movementFinal);
             }
         }
@@ -216,7 +226,8 @@ public class MovementsPlayer : MonoBehaviour
             float dashDistance = variables.dashDistance;
 
             RaycastHit hit;
-            if (Physics.Raycast(rb.position, dashDirection, out hit, dashDistance))
+            Vector3 raycastOrigin = rb.position + Vector3.up * 0.5f;
+            if (Physics.Raycast(raycastOrigin, dashDirection, out hit, dashDistance))
             {
                 dashTargetPosition = hit.point - dashDirection * 0.1f;
             }
