@@ -33,10 +33,6 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        
-        
-            
            if (other.CompareTag(enemyTag))
            {
                BodyPart bodyPart = other.GetComponent<BodyPart>();
@@ -74,7 +70,6 @@ public class Projectile : MonoBehaviour
                
                
            }
-           
 
            ReturnToPool();
         
