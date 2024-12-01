@@ -8,6 +8,7 @@ public class RechargingHeath : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            print("Toco");
             if (healthSystem == null)
             {
                 healthSystem = other.GetComponent<HealthSystem>();

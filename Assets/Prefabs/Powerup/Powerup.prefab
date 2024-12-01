@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6569762689983274585}
   - component: {fileID: 1996266980649290025}
   - component: {fileID: 4181349918867013911}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,4 +121,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9250e7c26288954459407f829f83f960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyManager: {fileID: 0}

@@ -15,8 +15,7 @@ public class DamagePlayer : MonoBehaviour
          HealthSystem healthSystem = other.GetComponent<HealthSystem>();
          if (healthSystem !=null)
          {
-            healthSystem.TakeDamage(damage);
-            Debug.Log($"machacador hizo daño a jugador: {damage}");
+                healthSystem.DecreaseHealth(10);
          }
          
       }

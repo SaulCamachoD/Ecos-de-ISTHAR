@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 public class PlayerSettings : MonoBehaviour
-{
+{       
     [Header ("Player Speed")]
     public float speed;
     public float speedSprint;
@@ -32,4 +32,6 @@ public class PlayerSettings : MonoBehaviour
 
 
     public float wallGravity;
+
+   
 }
