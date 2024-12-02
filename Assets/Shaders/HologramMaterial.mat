@@ -56,12 +56,12 @@ Material:
     - _QueueOffset: 0
     - _SrcBlend: 5
     - _Surface: 1
-    - _VertexOffset: 0.1
+    - _VertexOffset: 0.05
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _FresnelColor: {r: 0.10291934, g: 1, b: 0.06132078, a: 1}
+    - _FresnelColor: {r: 0, g: 1.8315054, b: 19.468573, a: 1}
     - _ScanLineMove: {r: 2.36, g: 0.27, b: 0, a: 0}
     - _ScanLinesTiling: {r: 3, g: 20.72, b: 0, a: 0}
   m_BuildTextureStacks: []
