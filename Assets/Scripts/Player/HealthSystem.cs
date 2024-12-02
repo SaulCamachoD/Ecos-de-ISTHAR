@@ -10,6 +10,7 @@ public class HealthSystem : MonoBehaviour
     private UnityEngine.Rendering.Universal.Vignette vignette;
     public Slider healthBarSlider;
     public float healthRegenAmount = 5f;
+    public SounPlayerManager sounPlayerManager;
 
     private bool isLowHealth;
     private Coroutine vignetteCoroutine; // Para almacenar la coroutine activa
@@ -60,7 +61,7 @@ public class HealthSystem : MonoBehaviour
                 }
 
                 // Opcional: Restablecer la intensidad del Vignette
-                //vignette.intensity.value = 0f;
+                vignette.intensity.value = 0f;
             }
         }
     }
@@ -69,6 +70,8 @@ public class HealthSystem : MonoBehaviour
     {
         playerSettings.health -= damage;
         UpdateHeatlhLevel();
+        StartCoroutine(DamageVignetteEffect());
+        sounPlayerManager.PlaySound2("Damage");
     }
 
     public void DecreaseHealth(float amount)
@@ -76,6 +79,7 @@ public class HealthSystem : MonoBehaviour
         playerSettings.health = Mathf.Max(playerSettings.health - amount, 0f);
         UpdateHeatlhLevel();
         StartCoroutine(DamageVignetteEffect());
+        sounPlayerManager.PlaySound2("Damage");
     }
 
     public void IncreaseHealth(float amount)
@@ -100,7 +104,7 @@ public class HealthSystem : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            vignette.intensity.value = Mathf.Lerp(0.5f, 0f, elapsed / duration);
+            vignette.intensity.value = Mathf.Lerp(0.6f, 0.2f, elapsed / duration);
             yield return null;
         }
 
