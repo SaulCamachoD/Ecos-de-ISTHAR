@@ -41,6 +41,7 @@ public class MovementsPlayer : MonoBehaviour
     public bool Wallleft = false;
     public bool CanWalk = false;
     private bool isPlayingStepWallSound = false;
+    private bool isPlayingGunSpund = false;
 
 
 
@@ -357,10 +358,23 @@ public class MovementsPlayer : MonoBehaviour
             {
                 weaponController.Fire(true);
                 animationsPlayer.ActivateGun(true);
+                if (!isPlayingGunSpund)
+                {
+                    sounPlayerManager.PlaySound3("Gun2");
+                    isPlayingStepWallSound = true;
+                }
             }
             else 
             { 
                 weaponVFX.PlayMuzzleFlash();
+                if (isWalkingOnWall)
+                {
+                    if (!isPlayingGunSpund) 
+                    {
+                        sounPlayerManager.PlaySound3("Gun1");
+                        isPlayingStepWallSound = true;
+                    }
+                }
             }
         }
     }
@@ -372,11 +386,21 @@ public class MovementsPlayer : MonoBehaviour
             weaponController.Fire(true);
             animationsPlayer.Shot();
             weaponVFX.StopMuzzleFlash();
+            if (isPlayingGunSpund)
+            {
+                sounPlayerManager.StopSound3();
+                isPlayingStepWallSound = false;
+            }
         }
         else
         {
             weaponController.HeavyAttack(false);
             animationsPlayer.ActivateGun(false);
+            if (isPlayingGunSpund)
+            {
+                sounPlayerManager.StopSound3();
+                isPlayingStepWallSound = false;
+            }
         }
 
         weaponController.Fire(false);
