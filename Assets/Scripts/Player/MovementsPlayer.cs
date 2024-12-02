@@ -17,10 +17,13 @@ public class MovementsPlayer : MonoBehaviour
     public AttackModeCamera attackModeCamera;
     public WeaponController weaponController;
     public AnimationsPlayer animationsPlayer;
+    public SounPlayerManager sounPlayerManager;
+    public AudioSource audioSource;
+    public AudioSource audioSource3;
     public LayerMask obstacleLayer;
     public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
-    public float WallDetectionDistance = 1.5f;
+    public float WallDetectionDistance = 0.5f;
     public float stepHeight = 0.5f;
     public float stepSmooth = 0.2f;
     public float stepDetectionDistance = 0.5f;
@@ -37,6 +40,8 @@ public class MovementsPlayer : MonoBehaviour
     public bool WallRight = false;
     public bool Wallleft = false;
     public bool CanWalk = false;
+    private bool isPlayingStepWallSound = false;
+
 
 
     private RaycastHit lastHit;
@@ -45,6 +50,7 @@ public class MovementsPlayer : MonoBehaviour
     {
         controls = new();
         mainCamera = Camera.main;
+        audioSource = GetComponent<AudioSource>();
 
     }
 
@@ -93,7 +99,41 @@ public class MovementsPlayer : MonoBehaviour
             }
         }
 
+        if (directionPlayer.magnitude > 0.1f && !isWalkingOnWall)
+        {
+            if (!audioSource.isPlaying  )
+            {
+                sounPlayerManager.PlaySound("Walk"); 
+            }
+            
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                sounPlayerManager.StopSound(); 
+            }
+        }
+
+        if (isWalkingOnWall)
+        {
+            if (!isPlayingStepWallSound) // Solo reproducir si no está sonando ya
+            {
+                sounPlayerManager.PlaySound3("StepWall");
+                isPlayingStepWallSound = true;
+            }
+        }
+        else
+        {
+            if (isPlayingStepWallSound) // Detener el sonido si ya no está caminando en la pared
+            {
+                sounPlayerManager.StopSound3();
+                isPlayingStepWallSound = false;
+            }
+        }
+
     }
+    
 
     private void FixedUpdate()
     {
@@ -170,11 +210,13 @@ public class MovementsPlayer : MonoBehaviour
     private void StartRunning(InputAction.CallbackContext context)
     {
         isRunning = true;
+        sounPlayerManager.PlaySound("Run");
     }
 
     private void StopRunning(InputAction.CallbackContext context)
     {
         isRunning = false;
+        sounPlayerManager.StopSound();
     }
 
     private void Jump(InputAction.CallbackContext context)
@@ -216,6 +258,7 @@ public class MovementsPlayer : MonoBehaviour
 
     private void StartDash(InputAction.CallbackContext context)
     {
+        sounPlayerManager.PlaySound2("Dash");
         if (!isDashing)
         {
             isDashing = true;
@@ -233,7 +276,6 @@ public class MovementsPlayer : MonoBehaviour
             }
             else
             {
-
                 dashTargetPosition = rb.position + dashDirection * dashDistance;
             }
         }
@@ -263,6 +305,7 @@ public class MovementsPlayer : MonoBehaviour
         {
             wallNormal = lastHit.normal;
             StartWallRun();
+            
         }
         else if (isWalkingOnWall)
         {
@@ -302,6 +345,8 @@ public class MovementsPlayer : MonoBehaviour
     {
         isWalkingOnWall = false;
         rb.useGravity = true;
+        sounPlayerManager.StopSound3();
+
     }
 
     private void FireWeapon(InputAction.CallbackContext context)
@@ -373,5 +418,6 @@ public class MovementsPlayer : MonoBehaviour
             }
         }
     }
+
 
 }

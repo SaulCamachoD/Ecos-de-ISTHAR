@@ -10,6 +10,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] bool attackingHeavy = false;
     public Camera mainCamera;
     public float directionOffset = 0f;
+    public SounPlayerManager soundplayerManager;
 
     public EnergyManager energyManager;
 
