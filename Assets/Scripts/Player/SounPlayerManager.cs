@@ -66,12 +66,12 @@ public class SounPlayerManager : MonoBehaviour
             case "Gun1":
                 audioSource3.clip = Gun1;
                 audioSource3.loop = true;  
-                audioSource3.pitch = 1f;
+                audioSource3.pitch = 0.5f;
                 break;
             case "Gun2":
                 audioSource3.clip = Gun2;
                 audioSource3.loop = true;  
-                audioSource3.pitch = 1f;
+                audioSource3.pitch = 0.7f;
                 break;
             default:
                 return;

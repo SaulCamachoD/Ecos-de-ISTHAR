@@ -82,5 +82,9 @@ public class AnimationsPlayer : MonoBehaviour
     {
         animator.SetBool("Bullet2", option);
     }
-    
+
+    public void ActivateDeath() 
+    {
+        animator.SetTrigger("Death");
+    }
 }

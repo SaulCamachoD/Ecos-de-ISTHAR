@@ -48,4 +48,9 @@ public class AttackModeCamera : MonoBehaviour
             HudManager.TargetVisibility(false);
         }
     }
+
+    public void RestartHudVisibility()
+    {
+        HudManager.TargetVisibility(false);
+    }
 }

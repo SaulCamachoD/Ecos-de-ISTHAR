@@ -20,6 +20,7 @@ public class MovementsPlayer : MonoBehaviour
     public SounPlayerManager sounPlayerManager;
     public AudioSource audioSource;
     public AudioSource audioSource3;
+    public CursorContrloller cursorContrloller;
     public LayerMask obstacleLayer;
     public LayerMask wallLayer;
     public float obstacleDetectionDistance = 1.5f;
@@ -39,9 +40,12 @@ public class MovementsPlayer : MonoBehaviour
     public bool isAxesInverted = false;
     public bool WallRight = false;
     public bool Wallleft = false;
+    public bool IsDead = false;
     public bool CanWalk = false;
-    private bool isPlayingStepWallSound = false;
-    private bool isPlayingGunSpund = false;
+    [SerializeField] bool didHit;
+    [SerializeField] bool isPlayingStepWallSound = false;
+    [SerializeField] bool isPlayingGunSound = false;
+
 
 
 
@@ -62,10 +66,11 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.started += StartRunning;
         controls.InputsPlayer.Sprint.canceled += StopRunning;
         controls.InputsPlayer.Dash.started += StartDash;
-        controls.InputsPlayer.AttackMode.started += MoveTargetCam;
+        controls.InputsPlayer.AttackMode.started += OnMoveTargetCam;
         controls.InputsPlayer.Attack.performed += FireWeapon;
         controls.InputsPlayer.Attack.canceled += StopFireWeapon;
         controls.InputsPlayer.ChangeWeapon.started += ChangeWeapon;
+        controls.InputsPlayer.Pause.started += ActivatePauseMenu;
     }
 
     private void OnDisable()
@@ -76,61 +81,65 @@ public class MovementsPlayer : MonoBehaviour
         controls.InputsPlayer.Sprint.started -= StartRunning;
         controls.InputsPlayer.Sprint.canceled -= StopRunning;
         controls.InputsPlayer.Dash.started -= StartDash;
-        controls.InputsPlayer.AttackMode.started -= MoveTargetCam;
+        controls.InputsPlayer.AttackMode.started -= OnMoveTargetCam;
         controls.InputsPlayer.Attack.performed -= FireWeapon;
         controls.InputsPlayer.Attack.canceled -= FireWeapon;
         controls.InputsPlayer.Attack.canceled -= StopFireWeapon;
         controls.InputsPlayer.ChangeWeapon.started -= ChangeWeapon;
+        controls.InputsPlayer.Pause.started += ActivatePauseMenu;
     }
 
     private void Update()
     {
-        directionPlayer = controls.InputsPlayer.Move.ReadValue<Vector2>();
-
-        if (isDashing)
+        if (!IsDead)
         {
-            dashTimeElapsed += Time.deltaTime;
-            float dashProgress = dashTimeElapsed / variables.dashDuration;
+            directionPlayer = controls.InputsPlayer.Move.ReadValue<Vector2>();
 
-            rb.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, dashProgress);
+            if (isDashing)
+            {
+                dashTimeElapsed += Time.deltaTime;
+                float dashProgress = dashTimeElapsed / variables.dashDuration;
 
-            if (dashTimeElapsed >= variables.dashDuration)
-            {
-                isDashing = false;
-            }
-        }
+                rb.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, dashProgress);
 
-        if (directionPlayer.magnitude > 0.1f && !isWalkingOnWall)
-        {
-            if (!audioSource.isPlaying  )
-            {
-                sounPlayerManager.PlaySound("Walk"); 
+                if (dashTimeElapsed >= variables.dashDuration)
+                {
+                    isDashing = false;
+                }
             }
-            
-        }
-        else
-        {
-            if (audioSource.isPlaying)
-            {
-                sounPlayerManager.StopSound(); 
-            }
-        }
 
-        if (isWalkingOnWall)
-        {
-            if (!isPlayingStepWallSound) // Solo reproducir si no está sonando ya
+            if (directionPlayer.magnitude > 0.1f && !isWalkingOnWall)
             {
-                sounPlayerManager.PlaySound3("StepWall");
-                isPlayingStepWallSound = true;
+                if (!audioSource.isPlaying)
+                {
+                    sounPlayerManager.PlaySound("Walk");
+                }
+
             }
-        }
-        else
-        {
-            if (isPlayingStepWallSound) // Detener el sonido si ya no está caminando en la pared
+            else
             {
-                sounPlayerManager.StopSound3();
-                isPlayingStepWallSound = false;
+                if (audioSource.isPlaying)
+                {
+                    sounPlayerManager.StopSound();
+                }
             }
+
+            if (isWalkingOnWall)
+            {
+                if (!isPlayingStepWallSound) // Solo reproducir si no está sonando ya
+                {
+                    sounPlayerManager.PlaySound3("StepWall");
+                    isPlayingStepWallSound = true;
+                }
+            }
+            else
+            {
+                if (isPlayingStepWallSound) // Detener el sonido si ya no está caminando en la pared
+                {
+                    sounPlayerManager.StopSound3();
+                    isPlayingStepWallSound = false;
+                }
+            } 
         }
 
     }
@@ -282,7 +291,7 @@ public class MovementsPlayer : MonoBehaviour
         }
     }
 
-    private void MoveTargetCam(InputAction.CallbackContext context)
+    private void MoveTargetCam(bool manualActivation = false)
     {
         attackModeCamera.MoveTarget();
 
@@ -295,7 +304,18 @@ public class MovementsPlayer : MonoBehaviour
         {
             isAttackinMode = false;
         }
+
+        if (manualActivation)
+        {
+            isAttackinMode = false;
+        }
     }
+
+    public void OnMoveTargetCam(InputAction.CallbackContext context)
+    {
+          MoveTargetCam(); 
+    }
+
 
     private void RunWall()
     {
@@ -358,21 +378,21 @@ public class MovementsPlayer : MonoBehaviour
             {
                 weaponController.Fire(true);
                 animationsPlayer.ActivateGun(true);
-                if (!isPlayingGunSpund)
+                if (!isPlayingGunSound)
                 {
                     sounPlayerManager.PlaySound3("Gun2");
-                    isPlayingStepWallSound = true;
+                    isPlayingGunSound = true;
                 }
             }
             else 
             { 
                 weaponVFX.PlayMuzzleFlash();
-                if (isWalkingOnWall)
+                if (!isWalkingOnWall)
                 {
-                    if (!isPlayingGunSpund) 
+                    if (!isPlayingGunSound) 
                     {
                         sounPlayerManager.PlaySound3("Gun1");
-                        isPlayingStepWallSound = true;
+                        isPlayingGunSound = true;
                     }
                 }
             }
@@ -380,30 +400,28 @@ public class MovementsPlayer : MonoBehaviour
     }
     private void StopFireWeapon(InputAction.CallbackContext context)
     {
-        if (weaponController.GetCurrentWeaponIndex() == 1)
+        int currentWeaponIndex = weaponController.GetCurrentWeaponIndex();
+
+        if (currentWeaponIndex == 1)
         {
             weaponController.HeavyAttack(true);
-            weaponController.Fire(true);
+            weaponController.Fire(false);
             animationsPlayer.Shot();
             weaponVFX.StopMuzzleFlash();
-            if (isPlayingGunSpund)
-            {
-                sounPlayerManager.StopSound3();
-                isPlayingStepWallSound = false;
-            }
         }
         else
         {
             weaponController.HeavyAttack(false);
             animationsPlayer.ActivateGun(false);
-            if (isPlayingGunSpund)
-            {
-                sounPlayerManager.StopSound3();
-                isPlayingStepWallSound = false;
-            }
+            weaponController.Fire(false);
         }
 
-        weaponController.Fire(false);
+        // Detener sonido del disparo
+        if (isPlayingGunSound)
+        {
+            sounPlayerManager.StopSound3();
+            isPlayingGunSound = false; // Reiniciar estado
+        }
     }
 
     private void ChangeWeapon(InputAction.CallbackContext context)
@@ -443,5 +461,21 @@ public class MovementsPlayer : MonoBehaviour
         }
     }
 
+    public void RestartVariables()
+    {
+        IsDeath(true);
+        isAttackinMode = false;
+        isAxesInverted = false;
+        MoveTargetCam(true);
+    }
 
+    public void IsDeath(bool death)
+    {
+        IsDead = death;
+    }
+
+    public void ActivatePauseMenu(InputAction.CallbackContext context)
+    {
+        cursorContrloller.ActivatePauseMenu();
+    }
 }

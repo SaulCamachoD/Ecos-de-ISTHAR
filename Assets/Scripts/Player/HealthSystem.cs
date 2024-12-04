@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -6,11 +7,15 @@ using UnityEngine.UI;
 public class HealthSystem : MonoBehaviour
 {
     public PlayerSettings playerSettings;
+    public MovementsPlayer movementsPlayer;
+    public AnimationsPlayer animationsPlayer;
     public Volume globalVolume;
     private UnityEngine.Rendering.Universal.Vignette vignette;
     public Slider healthBarSlider;
     public float healthRegenAmount = 5f;
     public SounPlayerManager sounPlayerManager;
+    public RestartPlayer restartPlayer;
+    private bool die = false;
 
     private bool isLowHealth;
     private Coroutine vignetteCoroutine; // Para almacenar la coroutine activa
@@ -63,6 +68,18 @@ public class HealthSystem : MonoBehaviour
                 // Opcional: Restablecer la intensidad del Vignette
                 vignette.intensity.value = 0f;
             }
+        }
+
+        if (playerSettings.health <= 0)
+        {   
+            die = true;
+            if (die)
+            {
+                playerSettings.health = playerSettings.healthMax;
+                StartCoroutine(DeathCorutine()); 
+                die = false;
+            }
+
         }
     }
 
@@ -121,6 +138,12 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    public void Death()
+    {
+        restartPlayer.RestarInCurrentPosition();
+        UpdateHeatlhLevel();
+    }
+
     private System.Collections.IEnumerator HealthRegenRoutine()
     {
         while (true)
@@ -132,4 +155,15 @@ public class HealthSystem : MonoBehaviour
             yield return new WaitForSeconds(1f); // Espera 1 segundo entre regeneraciones.
         }
     }
+
+    IEnumerator DeathCorutine() 
+    {
+        movementsPlayer.RestartVariables();
+        animationsPlayer.ActivateDeath();
+        yield return new WaitForSeconds(6f);
+        Death();
+        movementsPlayer.IsDeath(false);
+    }
+
+
 }
