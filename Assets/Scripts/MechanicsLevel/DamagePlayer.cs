@@ -15,7 +15,8 @@ public class DamagePlayer : MonoBehaviour
          HealthSystem healthSystem = other.GetComponent<HealthSystem>();
          if (healthSystem !=null)
          {
-                healthSystem.DecreaseHealth(10);
+                healthSystem.DecreaseHealth(damage);
+                Debug.Log($"Trigger activado por: {other.name}");
          }
          
       }
