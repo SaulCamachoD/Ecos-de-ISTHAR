@@ -139,8 +139,15 @@ public class MovementsPlayer : MonoBehaviour
                     sounPlayerManager.StopSound3();
                     isPlayingStepWallSound = false;
                 }
-            } 
+            }
         }
+
+        else 
+        {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
+
 
     }
     
@@ -463,10 +470,12 @@ public class MovementsPlayer : MonoBehaviour
 
     public void RestartVariables()
     {
+        MoveTargetCam(false);
+        rb.linearVelocity = Vector3.zero;
         IsDeath(true);
+        StopWallRun();
         isAttackinMode = false;
-        isAxesInverted = false;
-        MoveTargetCam(true);
+        attackModeCamera.RestartHudVisibility();
     }
 
     public void IsDeath(bool death)
@@ -477,5 +486,12 @@ public class MovementsPlayer : MonoBehaviour
     public void ActivatePauseMenu(InputAction.CallbackContext context)
     {
         cursorContrloller.ActivatePauseMenu();
+    }
+
+    public void StopSound()
+    {
+        sounPlayerManager.StopSound();
+        sounPlayerManager.StopSound2();
+        sounPlayerManager.StopSound3();
     }
 }

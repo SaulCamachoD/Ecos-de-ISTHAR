@@ -158,6 +158,7 @@ public class HealthSystem : MonoBehaviour
 
     IEnumerator DeathCorutine() 
     {
+        movementsPlayer.StopSound();
         movementsPlayer.RestartVariables();
         animationsPlayer.ActivateDeath();
         yield return new WaitForSeconds(6f);

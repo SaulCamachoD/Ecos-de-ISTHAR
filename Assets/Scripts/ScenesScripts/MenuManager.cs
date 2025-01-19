@@ -7,15 +7,9 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject panelSettings;
     [SerializeField] private GameObject panelCredits;
-    [SerializeField] private GameObject panelPause;
+    [SerializeField] private GameObject MainMenuPanel;
+
     private InputSystem_Actions _controls;
-
-
-    private void Update()
-    {
-       Pause();
-    }
-
 
     public void Play()
    {
@@ -26,29 +20,32 @@ public class MenuManager : MonoBehaviour
    {
       panelSettings.SetActive(true);
       panelCredits.SetActive(false);
+      ActiveMainMenu(false);
    }
 
    public void OpenCredits()
    {
       panelCredits.SetActive(true);
       panelSettings.SetActive(false);
-   }
+      ActiveMainMenu(false);
+    }
 
    public void ClosePanels()
    {
       panelSettings.SetActive(false);
       panelCredits.SetActive(false);
-      panelPause.SetActive(false);
+        ActiveMainMenu(true);
    }
 
-   public void Pause()
-   {
-      if (Input.GetKeyDown(KeyCode.L))
-      {
-         panelPause.SetActive(true);
-         Time.timeScale = 0;
-         Debug.Log("PAUSAAAA");
+    public void ActiveMainMenu(bool IsActive)
+    {
+        MainMenuPanel.SetActive(IsActive);
+    }
 
-      }
-   }
+   
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

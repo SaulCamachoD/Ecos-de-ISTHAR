@@ -24315,8 +24315,8 @@ MonoBehaviour:
   baseDamage: 10
   enemyTag: Enemy
   playerTag: Player
-  objectTag: 
-  bossTag: 
+  objectTag: Breakable
+  DoorTag: Door
 --- !u!54 &6411777672180678007
 Rigidbody:
   m_ObjectHideFlags: 0

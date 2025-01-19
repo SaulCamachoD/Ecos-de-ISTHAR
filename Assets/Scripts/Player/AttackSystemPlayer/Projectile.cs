@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     public string enemyTag;
     public string playerTag; 
     public string objectTag;
-    public string bossTag;
+    public string DoorTag;
     private HealthSystem _healthSystem;
     private void OnEnable()
     {
@@ -63,15 +63,15 @@ public class Projectile : MonoBehaviour
                {
                    breakeable.TakeDamage(baseDamage);
                    Debug.Log($"ataque a objeto {baseDamage}");
-               }
+                   ReturnToPool();
+                }
            }
-           else if (other.CompareTag(bossTag))
+           else if (other.CompareTag(DoorTag))
            {
-               
-               
+            ReturnToPool();
            }
 
-           ReturnToPool();
+           
         
     }
 

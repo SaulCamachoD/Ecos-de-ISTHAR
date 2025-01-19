@@ -15,7 +15,6 @@ public class RestartPlayer : MonoBehaviour
 
     public void AsignementPosition(Transform transform)
     {
-        print(transform.position);
         currentposition.position = transform.position;
     }
 

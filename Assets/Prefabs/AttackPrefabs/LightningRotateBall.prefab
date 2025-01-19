@@ -71,7 +71,7 @@ MonoBehaviour:
   enemyTag: Enemy
   playerTag: Player
   objectTag: Breakable
-  bossTag: 
+  DoorTag: Door
 --- !u!135 &-6769140144922475598
 SphereCollider:
   m_ObjectHideFlags: 0

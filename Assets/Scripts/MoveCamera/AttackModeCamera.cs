@@ -51,6 +51,8 @@ public class AttackModeCamera : MonoBehaviour
 
     public void RestartHudVisibility()
     {
+        targetPosition = inicialPosition;
+        transform.localPosition = inicialPosition;
         HudManager.TargetVisibility(false);
     }
 }
